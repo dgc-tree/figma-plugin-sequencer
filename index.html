@@ -60,24 +60,28 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       font-weight: 600;
-      font-size: 18px;
+      font-size: 27px;
       color: var(--gray-900);
       text-decoration: none;
     }
 
     .logo-icon {
-      width: 32px;
-      height: 32px;
+      width: 48px;
+      height: 48px;
       background: var(--primary-dark);
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 21px;
+    }
+
+    .logo-text {
+      display: inline;
     }
 
     .logo-suffix {
@@ -540,7 +544,7 @@
     <div class="header-content">
       <a href="#" class="logo">
         <div class="logo-icon">#</div>
-        Sequencer<span id="logo-suffix" class="logo-suffix"></span>
+        <span class="logo-text"><span id="logo-name"></span><span id="logo-suffix" class="logo-suffix"></span></span>
       </a>
       <a href="https://github.com/dgc-tree/figma-plugin-sequencer" class="nav-link">GitHub</a>
     </div>
@@ -755,51 +759,73 @@
 
   <script>
     (function() {
-      var suffix = document.getElementById('logo-suffix');
+      var nameEl = document.getElementById('logo-name');
+      var suffixEl = document.getElementById('logo-suffix');
+      var baseName = 'Sequencer';
       var sequences = ['ABC', '123', 'F-40'];
-      var seqIndex = 0;
-      var charIndex = 0;
-      var isDeleting = false;
-      var typeSpeed = 150;
-      var deleteSpeed = 100;
-      var pauseAfterType = 1500;
-      var pauseAfterDelete = 300;
-      var pauseAfterCycle = 6000;
+      var typeSpeed = 100;
+      var deleteSpeed = 60;
+      var pauseAfterType = 1200;
+      var pauseAfterExit = 3000;
 
-      function tick() {
-        var current = sequences[seqIndex];
-
-        if (isDeleting) {
-          suffix.textContent = current.substring(0, charIndex - 1);
-          charIndex--;
-
-          if (charIndex === 0) {
-            isDeleting = false;
-            seqIndex++;
-
-            if (seqIndex >= sequences.length) {
-              seqIndex = 0;
-              setTimeout(tick, pauseAfterCycle);
-            } else {
-              setTimeout(tick, pauseAfterDelete);
-            }
-          } else {
-            setTimeout(tick, deleteSpeed);
-          }
-        } else {
-          suffix.textContent = current.substring(0, charIndex + 1);
-          charIndex++;
-
-          if (charIndex === current.length) {
-            isDeleting = true;
-            setTimeout(tick, pauseAfterType);
-          } else {
-            setTimeout(tick, typeSpeed);
+      function typeText(el, text, callback) {
+        var i = 0;
+        function type() {
+          if (i < text.length) {
+            el.textContent = text.substring(0, i + 1);
+            i++;
+            setTimeout(type, typeSpeed);
+          } else if (callback) {
+            callback();
           }
         }
+        type();
       }
 
-      setTimeout(tick, 1000);
+      function deleteText(el, callback) {
+        function del() {
+          var current = el.textContent;
+          if (current.length > 0) {
+            el.textContent = current.substring(0, current.length - 1);
+            setTimeout(del, deleteSpeed);
+          } else if (callback) {
+            callback();
+          }
+        }
+        del();
+      }
+
+      function cycleSequences(index, callback) {
+        if (index >= sequences.length) {
+          callback();
+          return;
+        }
+        typeText(suffixEl, sequences[index], function() {
+          setTimeout(function() {
+            deleteText(suffixEl, function() {
+              setTimeout(function() {
+                cycleSequences(index + 1, callback);
+              }, 200);
+            });
+          }, pauseAfterType);
+        });
+      }
+
+      function runAnimation() {
+        typeText(nameEl, baseName, function() {
+          setTimeout(function() {
+            cycleSequences(0, function() {
+              setTimeout(function() {
+                deleteText(nameEl, function() {
+                  setTimeout(runAnimation, pauseAfterExit);
+                });
+              }, 500);
+            });
+          }, 500);
+        });
+      }
+
+      setTimeout(runAnimation, 500);
     })();
   </script>
 
