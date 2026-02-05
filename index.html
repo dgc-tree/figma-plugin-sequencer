@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sequencer – Auto-increment anything in Figma</title>
+  <title>Sequencer - Auto-increment anything in Figma</title>
   <meta name="description" content="The smartest way to manage invoice numbers, version codes, and sequential IDs in your Figma designs. Multiple sequences, custom formats, one click updates.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,26 +122,7 @@
       font-size: 20px;
       color: var(--gray-500);
       max-width: 600px;
-      margin: 0 auto 16px;
-    }
-
-    .hero-formats {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 36px;
-    }
-
-    .format-tag {
-      padding: 6px 12px;
-      background: white;
-      border: 1px solid var(--gray-200);
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: 'SF Mono', Monaco, monospace;
-      color: var(--gray-700);
+      margin: 0 auto 36px;
     }
 
     .cta-button {
@@ -168,135 +149,102 @@
       height: 20px;
     }
 
-    /* ===== DEMO ===== */
+    /* ===== ANIMATED DEMO ===== */
     .demo {
-      max-width: 720px;
-      margin: -40px auto 0;
+      max-width: 600px;
+      margin: -20px auto 0;
       padding: 0 24px;
       position: relative;
       z-index: 10;
     }
 
-    .demo-window {
+    .demo-animation {
       background: white;
       border-radius: 16px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
       overflow: hidden;
       border: 1px solid var(--gray-200);
+      padding: 40px;
     }
 
-    .demo-header {
-      background: var(--gray-100);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px solid var(--gray-200);
-    }
-
-    .demo-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .demo-dot:nth-child(1) { background: #ef4444; }
-    .demo-dot:nth-child(2) { background: #eab308; }
-    .demo-dot:nth-child(3) { background: #22c55e; }
-
-    .demo-title {
-      flex: 1;
-      text-align: center;
-      font-size: 13px;
-      color: var(--gray-500);
-      font-weight: 500;
-    }
-
-    .demo-content {
-      padding: 32px 40px;
-    }
-
-    .demo-select {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .demo-dropdown {
-      flex: 1;
-      padding: 10px 14px;
-      border: 1px solid var(--gray-200);
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      background: white;
-      color: var(--gray-800);
-    }
-
-    .demo-icon-btn {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--gray-200);
-      border-radius: 8px;
-      background: var(--gray-50);
-      font-size: 18px;
+    .sequence-animation {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--gray-500);
+      gap: 24px;
     }
 
-    .number-display {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 24px;
-      padding: 20px;
-      background: var(--gray-50);
-      border-radius: 12px;
-    }
-
-    .number-box {
+    .seq-box {
       text-align: center;
     }
 
-    .number-label {
-      font-size: 10px;
+    .seq-label {
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--gray-400);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
-    .number-value {
-      font-size: 36px;
+    .seq-value {
+      font-size: 42px;
       font-weight: 700;
-      color: var(--gray-800);
       font-family: 'SF Mono', Monaco, monospace;
+      min-width: 180px;
     }
 
-    .number-value.next {
+    .seq-current {
+      color: var(--gray-800);
+    }
+
+    .seq-next {
       color: var(--primary);
     }
 
-    .arrow {
-      font-size: 24px;
+    .seq-arrow {
+      font-size: 28px;
       color: var(--gray-300);
     }
 
-    .demo-button {
-      width: 100%;
-      padding: 14px 24px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 8px;
+    .seq-type {
+      margin-top: 16px;
       font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
+      color: var(--gray-500);
+      font-weight: 500;
     }
+
+    /* Animation for cycling through sequences */
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; transform: translateY(10px); }
+      10%, 90% { opacity: 1; transform: translateY(0); }
+    }
+
+    .sequence-slide {
+      animation: fadeInOut 3s ease-in-out infinite;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sequence-slider {
+      position: relative;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sequence-slide:nth-child(1) { animation-delay: 0s; }
+    .sequence-slide:nth-child(2) { animation-delay: 3s; }
+    .sequence-slide:nth-child(3) { animation-delay: 6s; }
+    .sequence-slide:nth-child(4) { animation-delay: 9s; }
+    .sequence-slide:nth-child(5) { animation-delay: 12s; }
+    .sequence-slide:nth-child(6) { animation-delay: 15s; }
+    .sequence-slide:nth-child(7) { animation-delay: 18s; }
+    .sequence-slide:nth-child(8) { animation-delay: 21s; }
 
     /* ===== USE CASES ===== */
     .use-cases {
@@ -548,17 +496,13 @@
         font-size: 16px;
       }
 
-      .demo-content {
-        padding: 24px;
-      }
-
-      .number-value {
+      .seq-value {
         font-size: 28px;
+        min-width: 120px;
       }
 
-      .number-display {
-        gap: 12px;
-        padding: 16px;
+      .sequence-slider {
+        height: 100px;
       }
 
       .features {
@@ -587,15 +531,8 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-badge">Free Figma Plugin</div>
-    <h1>Auto-increment anything.<br>Your format, your rules.</h1>
-    <p class="hero-subtitle">Invoices, quotes, versions, revisions—create unlimited sequences with custom prefixes and suffixes. One click updates every instance.</p>
-    <div class="hero-formats">
-      <span class="format-tag">INV-0001</span>
-      <span class="format-tag">Q2024-A</span>
-      <span class="format-tag">v2.3.1</span>
-      <span class="format-tag">REV-C</span>
-      <span class="format-tag">PO#5100</span>
-    </div>
+    <h1>Stop updating sequences by hand</h1>
+    <p class="hero-subtitle">Create unlimited sequences with custom prefixes. One click updates every instance.</p>
     <a href="https://www.figma.com/community/plugins" class="cta-button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -606,37 +543,130 @@
     </a>
   </section>
 
-  <!-- Demo Window -->
+  <!-- Animated Demo -->
   <div class="demo">
-    <div class="demo-window">
-      <div class="demo-header">
-        <div class="demo-dot"></div>
-        <div class="demo-dot"></div>
-        <div class="demo-dot"></div>
-        <div class="demo-title">Sequencer</div>
-      </div>
-      <div class="demo-content">
-        <div class="demo-select">
-          <select class="demo-dropdown">
-            <option>Invoice# (INV-0047)</option>
-            <option>Quote# (Q0012)</option>
-            <option>Revision (REV-C)</option>
-          </select>
-          <div class="demo-icon-btn">+</div>
-          <div class="demo-icon-btn">×</div>
-        </div>
-        <div class="number-display">
-          <div class="number-box">
-            <div class="number-label">Current</div>
-            <div class="number-value">INV-0047</div>
+    <div class="demo-animation">
+      <div class="sequence-slider">
+        <!-- Invoice -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">INV-0047</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">INV-0048</div>
+            </div>
           </div>
-          <div class="arrow">→</div>
-          <div class="number-box">
-            <div class="number-label">Next</div>
-            <div class="number-value next">INV-0048</div>
-          </div>
+          <div class="seq-type">Invoice</div>
         </div>
-        <button class="demo-button">Update Invoice#</button>
+        <!-- Quote -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">Q0012</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">Q0013</div>
+            </div>
+          </div>
+          <div class="seq-type">Quote</div>
+        </div>
+        <!-- Version -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">v2.1.0</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">v2.1.1</div>
+            </div>
+          </div>
+          <div class="seq-type">Version</div>
+        </div>
+        <!-- Revision -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">REV-C</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">REV-D</div>
+            </div>
+          </div>
+          <div class="seq-type">Revision</div>
+        </div>
+        <!-- Purchase Order -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">PO#5100</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">PO#5101</div>
+            </div>
+          </div>
+          <div class="seq-type">Purchase Order</div>
+        </div>
+        <!-- Estimate -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">EST-042</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">EST-043</div>
+            </div>
+          </div>
+          <div class="seq-type">Estimate</div>
+        </div>
+        <!-- Project Code -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">PROJ-AA</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">PROJ-AB</div>
+            </div>
+          </div>
+          <div class="seq-type">Project Code</div>
+        </div>
+        <!-- Document -->
+        <div class="sequence-slide">
+          <div class="sequence-animation">
+            <div class="seq-box">
+              <div class="seq-label">Current</div>
+              <div class="seq-value seq-current">DOC#789</div>
+            </div>
+            <div class="seq-arrow">→</div>
+            <div class="seq-box">
+              <div class="seq-label">Next</div>
+              <div class="seq-value seq-next">DOC#790</div>
+            </div>
+          </div>
+          <div class="seq-type">Document</div>
+        </div>
       </div>
     </div>
   </div>
@@ -645,7 +675,7 @@
   <section class="use-cases">
     <div class="use-cases-header">
       <h2>Endless possibilities</h2>
-      <p>Numbers, letters, or both. Add prefixes and suffixes to match your workflow.</p>
+      <p>Numbers, letters, or both. Add prefixes to match your workflow.</p>
     </div>
     <div class="use-cases-grid">
       <div class="use-case">
@@ -653,7 +683,7 @@
         <div class="use-case-label">Invoices</div>
       </div>
       <div class="use-case">
-        <div class="use-case-format">Q2024-A</div>
+        <div class="use-case-format">Q0012</div>
         <div class="use-case-label">Quotes</div>
       </div>
       <div class="use-case">
@@ -698,22 +728,22 @@
       <div class="feature-card">
         <div class="feature-icon">🔤</div>
         <h3>Numbers or letters</h3>
-        <p>Increment numbers (001→002) or letters (A→B→Z→AA). Perfect for versions, revisions, and alphanumeric codes.</p>
+        <p>Increment numbers (001 to 002) or letters (A to B to Z to AA). Perfect for versions, revisions, and alphanumeric codes.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">✨</div>
         <h3>Custom formats</h3>
-        <p>Add prefixes and suffixes to create any format. INV-0001, Q2024-A, REV-C—whatever your workflow needs.</p>
+        <p>Add prefixes to create any format you need. INV-0001, Q2024, REV-C, whatever your workflow requires.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🎯</div>
         <h3>Batch updates</h3>
-        <p>Updates every matching text layer on the page instantly. Headers, footers, tables—all synced with one click.</p>
+        <p>Updates every matching text layer on the page instantly. Headers, footers, and tables all synced with one click.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">💾</div>
         <h3>Persistent memory</h3>
-        <p>Your sequences save to the document. Close Figma, come back tomorrow—pick up exactly where you left off.</p>
+        <p>Your sequences save to the document. Close Figma, come back tomorrow, and pick up exactly where you left off.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🔒</div>
@@ -732,13 +762,13 @@
           <div class="step-number">1</div>
           <div class="step-icon">➕</div>
           <h3>Create a sequence</h3>
-          <p>Name it, pick number or letter, add an optional prefix/suffix. Done.</p>
+          <p>Name it, pick number or letter, add an optional prefix. Done.</p>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
           <div class="step-icon">📝</div>
           <h3>Add to your design</h3>
-          <p>Type your sequence value (e.g., INV-0001) anywhere in your Figma file.</p>
+          <p>Type your sequence value (eg. INV-0001) anywhere in your Figma file.</p>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
@@ -758,8 +788,8 @@
 
   <!-- Final CTA -->
   <section class="cta-section">
-    <h2>Stop updating numbers by hand</h2>
-    <p>Join thousands of designers who've automated the boring stuff.</p>
+    <h2>Ready to automate the boring stuff?</h2>
+    <p>Join designers who have streamlined their workflow.</p>
     <a href="https://www.figma.com/community/plugins" class="cta-button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
