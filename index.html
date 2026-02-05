@@ -80,6 +80,11 @@
       font-size: 14px;
     }
 
+    .logo-suffix {
+      color: #44FF88;
+      font-weight: 600;
+    }
+
     .nav-link {
       color: var(--gray-600);
       text-decoration: none;
@@ -535,7 +540,7 @@
     <div class="header-content">
       <a href="#" class="logo">
         <div class="logo-icon">#</div>
-        Sequencer
+        Sequencer<span id="logo-suffix" class="logo-suffix"></span>
       </a>
       <a href="https://github.com/dgc-tree/figma-plugin-sequencer" class="nav-link">GitHub</a>
     </div>
@@ -747,6 +752,56 @@
   <footer>
     <p>Built for designers who play with numbers.</p>
   </footer>
+
+  <script>
+    (function() {
+      var suffix = document.getElementById('logo-suffix');
+      var sequences = ['ABC', '123', 'F-40'];
+      var seqIndex = 0;
+      var charIndex = 0;
+      var isDeleting = false;
+      var typeSpeed = 150;
+      var deleteSpeed = 100;
+      var pauseAfterType = 1500;
+      var pauseAfterDelete = 300;
+      var pauseAfterCycle = 6000;
+
+      function tick() {
+        var current = sequences[seqIndex];
+
+        if (isDeleting) {
+          suffix.textContent = current.substring(0, charIndex - 1);
+          charIndex--;
+
+          if (charIndex === 0) {
+            isDeleting = false;
+            seqIndex++;
+
+            if (seqIndex >= sequences.length) {
+              seqIndex = 0;
+              setTimeout(tick, pauseAfterCycle);
+            } else {
+              setTimeout(tick, pauseAfterDelete);
+            }
+          } else {
+            setTimeout(tick, deleteSpeed);
+          }
+        } else {
+          suffix.textContent = current.substring(0, charIndex + 1);
+          charIndex++;
+
+          if (charIndex === current.length) {
+            isDeleting = true;
+            setTimeout(tick, pauseAfterType);
+          } else {
+            setTimeout(tick, typeSpeed);
+          }
+        }
+      }
+
+      setTimeout(tick, 1000);
+    })();
+  </script>
 
 </body>
 </html>
