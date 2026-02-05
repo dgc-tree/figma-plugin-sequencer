@@ -2,47 +2,32 @@
 <html>
 <head>
   <style>
-    /* ============================================================
-       SEQUENCER UI STYLES
-       ============================================================ */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: Inter, -apple-system, sans-serif;
       font-size: 12px;
       padding: 16px;
-      background: #ffffff;
+      background: #fff;
       color: #333;
     }
 
     .hidden { display: none !important; }
 
-    /* ----- Sequence Selector ----- */
-    .sequence-header {
+    /* Header */
+    .header {
       display: flex;
       gap: 6px;
       margin-bottom: 16px;
-      align-items: center;
     }
 
-    .sequence-select {
+    .seq-select {
       flex: 1;
       padding: 8px 10px;
       border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 12px;
-      font-weight: 500;
       background: white;
-      cursor: pointer;
-    }
-
-    .sequence-select:focus {
-      outline: none;
-      border-color: #18a0fb;
     }
 
     .btn-icon {
@@ -51,43 +36,47 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       background: #f5f5f5;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #666;
-      transition: all 0.15s;
     }
 
-    .btn-icon:hover {
-      background: #e8e8e8;
-      color: #333;
+    .btn-icon:hover { background: #e8e8e8; }
+    .btn-icon.danger:hover { background: #ffebe6; color: #c9372c; }
+
+    /* Mode badge */
+    .mode-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
     }
 
-    .btn-icon.danger:hover {
-      background: #ffebe6;
-      color: #c9372c;
-      border-color: #f5c2c7;
+    .mode-compliance {
+      background: #e6f7ed;
+      color: #1a7f4b;
     }
 
-    /* ----- Number Display ----- */
-    .number-display {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      padding: 16px;
+    .mode-design {
+      background: #e9f2ff;
+      color: #0055cc;
+    }
+
+    /* Info box */
+    .info-box {
       background: #f5f5f5;
       border-radius: 8px;
-    }
-
-    .number-box {
+      padding: 16px;
+      margin-bottom: 16px;
       text-align: center;
     }
 
-    .number-label {
+    .info-label {
       font-size: 10px;
       color: #666;
       text-transform: uppercase;
@@ -95,31 +84,54 @@
       margin-bottom: 4px;
     }
 
-    .number-value {
-      font-size: 28px;
+    .info-value {
+      font-size: 24px;
       font-weight: 600;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .info-value.primary { color: #18a0fb; }
+
+    .info-small {
+      font-size: 11px;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    /* Selection state */
+    .selection-state {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .selection-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .selection-text {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .selection-text strong {
       color: #333;
     }
 
-    .number-value.next {
-      color: #18a0fb;
-    }
-
-    .arrow {
-      font-size: 18px;
-      color: #999;
-    }
-
-    /* ----- Buttons ----- */
+    /* Buttons */
     .btn {
       width: 100%;
-      padding: 10px 16px;
+      padding: 12px 16px;
       border: none;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s;
+      margin-bottom: 8px;
     }
 
     .btn-primary {
@@ -127,36 +139,43 @@
       color: white;
     }
 
-    .btn-primary:hover {
-      background: #0d8de5;
-    }
+    .btn-primary:hover { background: #0d8de5; }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
 
     .btn-secondary {
       background: #f0f0f0;
       color: #333;
     }
 
-    .btn-secondary:hover {
-      background: #e0e0e0;
+    .btn-secondary:hover { background: #e0e0e0; }
+
+    .btn-danger {
+      background: #ffebe6;
+      color: #c9372c;
     }
 
-    /* ----- Reset Section ----- */
-    .reset-section {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #eee;
+    .btn-danger:hover { background: #ffd5cc; }
+
+    .btn-small {
+      padding: 8px 12px;
+      font-size: 11px;
+      width: auto;
     }
 
+    /* Reset row */
     .reset-row {
       display: flex;
       gap: 8px;
-      align-items: center;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #eee;
     }
 
     .reset-label {
       font-size: 11px;
       color: #666;
       white-space: nowrap;
+      line-height: 28px;
     }
 
     .input {
@@ -167,74 +186,36 @@
       font-size: 12px;
     }
 
-    .input:focus {
-      outline: none;
-      border-color: #18a0fb;
-    }
+    .input:focus { outline: none; border-color: #18a0fb; }
 
-    .btn-small {
-      padding: 6px 12px;
-      font-size: 11px;
-      width: auto;
-    }
-
-    /* ----- Status Message ----- */
+    /* Status */
     .status {
-      margin-top: 12px;
       padding: 8px;
       border-radius: 4px;
       font-size: 11px;
       text-align: center;
+      margin-top: 12px;
       display: none;
     }
 
-    .status.success {
-      display: block;
-      background: #e6f7ed;
-      color: #1a7f4b;
-    }
+    .status.success { display: block; background: #e6f7ed; color: #1a7f4b; }
+    .status.error { display: block; background: #ffebe6; color: #c9372c; }
+    .status.info { display: block; background: #e9f2ff; color: #0055cc; }
 
-    .status.error {
-      display: block;
-      background: #ffebe6;
-      color: #c9372c;
-    }
-
-    .status.info {
-      display: block;
-      background: #e9f2ff;
-      color: #0055cc;
-    }
-
-    /* ----- Empty State ----- */
-    .empty-state {
-      text-align: center;
-      padding: 40px 16px;
-    }
-
-    .empty-state p {
-      color: #666;
-      margin-bottom: 16px;
-    }
-
-    /* ----- Create Form ----- */
+    /* Create form */
     .create-form {
       background: #f9f9f9;
       border-radius: 8px;
       padding: 16px;
-      margin-bottom: 16px;
     }
 
     .form-title {
       font-weight: 600;
-      font-size: 13px;
-      margin-bottom: 12px;
-      color: #333;
+      font-size: 14px;
+      margin-bottom: 16px;
     }
 
-    .form-group {
-      margin-bottom: 12px;
-    }
+    .form-group { margin-bottom: 12px; }
 
     .form-label {
       display: block;
@@ -251,26 +232,55 @@
       font-size: 12px;
     }
 
-    .form-input:focus {
-      outline: none;
+    .form-input:focus { outline: none; border-color: #18a0fb; }
+
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-row .form-group { flex: 1; }
+    .form-row .form-group.small { flex: 0 0 80px; }
+
+    .type-selector, .mode-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .type-option, .mode-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .type-option:hover, .mode-option:hover {
       border-color: #18a0fb;
     }
 
-    .type-selector {
-      display: flex;
-      gap: 16px;
+    .type-option input, .mode-option input {
+      margin-top: 2px;
     }
 
-    .type-option {
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    .option-content {
+      flex: 1;
+    }
+
+    .option-title {
+      font-weight: 500;
       font-size: 12px;
-      cursor: pointer;
+      color: #333;
     }
 
-    .type-option input {
-      cursor: pointer;
+    .option-desc {
+      font-size: 10px;
+      color: #888;
+      margin-top: 2px;
     }
 
     .form-buttons {
@@ -279,300 +289,351 @@
       margin-top: 16px;
     }
 
-    .form-buttons .btn {
-      flex: 1;
+    .form-buttons .btn { flex: 1; margin-bottom: 0; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 16px;
     }
 
-    .form-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .form-row .form-group {
-      flex: 1;
-    }
-
-    .form-row .form-group.small {
-      flex: 0 0 70px;
-    }
-
-    .format-preview {
-      margin-top: 8px;
-      padding: 8px 10px;
-      background: #fff;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      font-size: 11px;
+    .empty-state p {
       color: #666;
-      text-align: center;
-    }
-
-    .format-preview strong {
-      color: #333;
-      font-weight: 600;
-    }
-
-    /* ----- Confirm Delete ----- */
-    .confirm-delete {
-      background: #fff5f5;
-      border: 1px solid #f5c2c7;
-      border-radius: 8px;
-      padding: 16px;
       margin-bottom: 16px;
-      text-align: center;
     }
 
-    .confirm-delete p {
+    /* Warning */
+    .warning {
+      background: #fff8e6;
+      border: 1px solid #ffd666;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 11px;
+      color: #9a6700;
       margin-bottom: 12px;
-      color: #c9372c;
-      font-size: 12px;
-    }
-
-    .confirm-delete .btn {
-      width: auto;
-      padding: 8px 16px;
-    }
-
-    .btn-danger {
-      background: #c9372c;
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background: #ae2a2a;
     }
   </style>
 </head>
 <body>
 
-  <!-- Empty State: No sequences yet -->
+  <!-- Empty State -->
   <div id="empty-state" class="empty-state hidden">
-    <p>No sequences yet.<br>Create one to get started!</p>
+    <p>No sequences yet</p>
     <button id="create-first-btn" class="btn btn-primary">Create Sequence</button>
   </div>
 
   <!-- Create Form -->
   <div id="create-form" class="create-form hidden">
     <div class="form-title">New Sequence</div>
+
     <div class="form-group">
       <label class="form-label">Name</label>
-      <input type="text" id="seq-name" class="form-input" placeholder="eg. Quote#">
+      <input type="text" id="seq-name" class="form-input" placeholder="eg. Invoice#">
     </div>
+
+    <div class="form-row">
+      <div class="form-group small">
+        <label class="form-label">Prefix</label>
+        <input type="text" id="seq-prefix" class="form-input" placeholder="eg. INV-">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Start at</label>
+        <input type="text" id="seq-start" class="form-input" placeholder="eg. 0001">
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="form-label">Type</label>
       <div class="type-selector">
         <label class="type-option">
           <input type="radio" name="seq-type" value="number" checked>
-          Number
+          <div class="option-content">
+            <div class="option-title">Number</div>
+            <div class="option-desc">0001 to 0002 to 0003</div>
+          </div>
         </label>
         <label class="type-option">
           <input type="radio" name="seq-type" value="letter">
-          Letter
+          <div class="option-content">
+            <div class="option-title">Letter</div>
+            <div class="option-desc">A to B to Z to AA</div>
+          </div>
         </label>
       </div>
     </div>
-    <div class="form-row">
-      <div class="form-group small">
-        <label class="form-label">Prefix</label>
-        <input type="text" id="seq-prefix" class="form-input" placeholder="eg. Q">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Start value</label>
-        <input type="text" id="seq-start" class="form-input" placeholder="eg. 0001">
+
+    <div class="form-group">
+      <label class="form-label">Mode</label>
+      <div class="mode-selector">
+        <label class="mode-option">
+          <input type="radio" name="seq-mode" value="compliance" checked>
+          <div class="option-content">
+            <div class="option-title">Compliance</div>
+            <div class="option-desc">For invoices, quotes. Locked after first use.</div>
+          </div>
+        </label>
+        <label class="mode-option">
+          <input type="radio" name="seq-mode" value="design">
+          <div class="option-content">
+            <div class="option-title">Design</div>
+            <div class="option-desc">For prototypes. Flexible, can reset anytime.</div>
+          </div>
+        </label>
       </div>
     </div>
-    <div id="format-preview" class="format-preview">
-      Preview: <strong>Q0001</strong> → <strong>Q0002</strong>
-    </div>
+
     <div class="form-buttons">
       <button id="cancel-create" class="btn btn-secondary">Cancel</button>
       <button id="confirm-create" class="btn btn-primary">Create</button>
     </div>
   </div>
 
-  <!-- Confirm Delete -->
-  <div id="confirm-delete" class="confirm-delete hidden">
-    <p>Delete "<span id="delete-name"></span>"?</p>
-    <div style="display: flex; gap: 8px; justify-content: center;">
-      <button id="cancel-delete" class="btn btn-secondary">Cancel</button>
-      <button id="do-delete" class="btn btn-danger">Delete</button>
-    </div>
-  </div>
-
   <!-- Main State -->
   <div id="main-state" class="hidden">
-    <!-- Sequence Selector -->
-    <div class="sequence-header">
-      <select id="sequence-select" class="sequence-select"></select>
+    <div class="header">
+      <select id="seq-select" class="seq-select"></select>
       <button id="add-btn" class="btn-icon" title="Add sequence">+</button>
       <button id="delete-btn" class="btn-icon danger" title="Delete sequence">×</button>
     </div>
 
-    <!-- Current / Next Display -->
-    <div class="number-display">
-      <div class="number-box">
-        <div class="number-label">Current</div>
-        <div class="number-value" id="current-value">—</div>
+    <div id="seq-info" class="info-box">
+      <span id="seq-mode-badge" class="mode-badge mode-compliance">Compliance</span>
+      <div class="info-label" style="margin-top: 12px;">Next Available</div>
+      <div class="info-value primary" id="next-value">Q0019</div>
+      <div class="info-small" id="highest-used">Highest used: Q0018</div>
+    </div>
+
+    <!-- Selection States -->
+    <div id="state-none" class="selection-state hidden">
+      <div class="selection-icon">👆</div>
+      <div class="selection-text">Select a text layer to stamp</div>
+    </div>
+
+    <div id="state-not-text" class="selection-state hidden">
+      <div class="selection-icon">📝</div>
+      <div class="selection-text">Select a <strong>text</strong> layer</div>
+    </div>
+
+    <div id="state-unlinked" class="selection-state hidden">
+      <div class="selection-icon">🔗</div>
+      <div class="selection-text">Ready to link and stamp</div>
+      <button id="link-stamp-btn" class="btn btn-primary" style="margin-top: 12px;">
+        Link and Stamp
+      </button>
+    </div>
+
+    <div id="state-needs-stamp" class="selection-state hidden">
+      <div class="selection-icon">⚡</div>
+      <div class="selection-text" id="needs-stamp-text">Duplicate detected. Needs new number.</div>
+      <button id="stamp-btn" class="btn btn-primary" style="margin-top: 12px;">
+        Stamp Next Number
+      </button>
+    </div>
+
+    <div id="state-stamped" class="selection-state hidden">
+      <div class="selection-icon">✓</div>
+      <div class="selection-text">
+        Stamped: <strong id="stamped-value">Q0018</strong>
       </div>
-      <div class="arrow">→</div>
-      <div class="number-box">
-        <div class="number-label">Next</div>
-        <div class="number-value next" id="next-value">—</div>
+      <div id="stamped-actions" style="margin-top: 12px;">
+        <button id="unlink-btn" class="btn btn-secondary btn-small">Unlink</button>
+      </div>
+      <div id="compliance-warning" class="warning hidden" style="margin-top: 12px;">
+        Cannot re-stamp in compliance mode
       </div>
     </div>
 
-    <!-- Update Button -->
-    <button id="update-btn" class="btn btn-primary">Update Sequence</button>
+    <div id="state-broken" class="selection-state hidden">
+      <div class="selection-icon">⚠️</div>
+      <div class="selection-text">Link broken (sequence deleted)</div>
+      <button id="relink-btn" class="btn btn-secondary" style="margin-top: 12px;">
+        Re-link to current sequence
+      </button>
+      <button id="clear-link-btn" class="btn btn-secondary btn-small" style="margin-top: 8px;">
+        Remove link
+      </button>
+    </div>
 
-    <!-- Reset Section -->
-    <div class="reset-section">
-      <div class="reset-row">
-        <span class="reset-label">Reset to:</span>
-        <input type="text" id="reset-input" class="input" placeholder="Enter value">
-        <button id="reset-btn" class="btn btn-secondary btn-small">Set</button>
-      </div>
+    <!-- Reset (design mode only) -->
+    <div id="reset-section" class="reset-row hidden">
+      <span class="reset-label">Reset to:</span>
+      <input type="text" id="reset-input" class="input" placeholder="Value">
+      <button id="reset-btn" class="btn btn-secondary btn-small">Set</button>
     </div>
   </div>
 
-  <!-- Status Message -->
   <div id="status" class="status"></div>
 
   <script>
-    // ============================================================
-    // SEQUENCER UI LOGIC
-    // ============================================================
-
-    // ----- State -----
+    // State
     let sequences = [];
     let selectedSequence = null;
-    let deleteTargetId = null;
+    let selectionState = 'none';
 
-    // ----- DOM Elements -----
+    // DOM
     const emptyState = document.getElementById('empty-state');
     const createForm = document.getElementById('create-form');
-    const confirmDelete = document.getElementById('confirm-delete');
     const mainState = document.getElementById('main-state');
     const statusEl = document.getElementById('status');
 
-    const sequenceSelect = document.getElementById('sequence-select');
+    const seqSelect = document.getElementById('seq-select');
     const addBtn = document.getElementById('add-btn');
     const deleteBtn = document.getElementById('delete-btn');
-    const currentValueEl = document.getElementById('current-value');
-    const nextValueEl = document.getElementById('next-value');
-    const updateBtn = document.getElementById('update-btn');
-    const resetInput = document.getElementById('reset-input');
-    const resetBtn = document.getElementById('reset-btn');
+    const createFirstBtn = document.getElementById('create-first-btn');
 
+    const seqModeBadge = document.getElementById('seq-mode-badge');
+    const nextValueEl = document.getElementById('next-value');
+    const highestUsedEl = document.getElementById('highest-used');
+    const resetSection = document.getElementById('reset-section');
+
+    const stateNone = document.getElementById('state-none');
+    const stateNotText = document.getElementById('state-not-text');
+    const stateUnlinked = document.getElementById('state-unlinked');
+    const stateNeedsStamp = document.getElementById('state-needs-stamp');
+    const stateStamped = document.getElementById('state-stamped');
+    const stateBroken = document.getElementById('state-broken');
+
+    const linkStampBtn = document.getElementById('link-stamp-btn');
+    const stampBtn = document.getElementById('stamp-btn');
+    const unlinkBtn = document.getElementById('unlink-btn');
+    const relinkBtn = document.getElementById('relink-btn');
+    const clearLinkBtn = document.getElementById('clear-link-btn');
+    const complianceWarning = document.getElementById('compliance-warning');
+    const stampedValueEl = document.getElementById('stamped-value');
+    const needsStampText = document.getElementById('needs-stamp-text');
+
+    // Create form
     const seqNameInput = document.getElementById('seq-name');
     const seqPrefixInput = document.getElementById('seq-prefix');
     const seqStartInput = document.getElementById('seq-start');
-    const formatPreview = document.getElementById('format-preview');
     const cancelCreate = document.getElementById('cancel-create');
     const confirmCreate = document.getElementById('confirm-create');
-    const createFirstBtn = document.getElementById('create-first-btn');
+    const resetInput = document.getElementById('reset-input');
+    const resetBtn = document.getElementById('reset-btn');
 
-    const deleteNameEl = document.getElementById('delete-name');
-    const cancelDelete = document.getElementById('cancel-delete');
-    const doDelete = document.getElementById('do-delete');
-
-    // ----- Message Handlers -----
+    // Message handler
     window.onmessage = (event) => {
       const msg = event.data.pluginMessage;
 
-      if (msg.type === 'init') {
+      if (msg.type === 'selection-state') {
         sequences = msg.sequences || [];
+        selectedSequence = msg.selectedSequence;
+        selectionState = msg.state;
 
         if (sequences.length === 0) {
           showEmptyState();
         } else {
-          selectedSequence = msg.selectedSequence;
-          populateDropdown(sequences, msg.selectedId);
-          showMainState();
+          showMainState(msg);
         }
       }
 
-      if (msg.type === 'sequence-selected') {
-        selectedSequence = msg.sequence;
-        showMainState();
-      }
-
-      if (msg.type === 'sequence-created') {
-        sequences = msg.sequences;
-        selectedSequence = msg.selectedSequence;
-        populateDropdown(sequences, msg.selectedId);
+      if (msg.type === 'sequence-created' || msg.type === 'sequence-deleted') {
         hideCreateForm();
-        showMainState();
-        showStatus('Sequence created', 'success');
       }
 
-      if (msg.type === 'sequence-deleted') {
-        sequences = msg.sequences;
-        selectedSequence = msg.selectedSequence;
-        hideConfirmDelete();
-
-        if (sequences.length === 0) {
-          showEmptyState();
-        } else {
-          populateDropdown(sequences, msg.selectedId);
-          showMainState();
-        }
-        showStatus('Sequence deleted', 'info');
-      }
-
-      if (msg.type === 'updated') {
-        selectedSequence = msg.sequence;
-        updateDropdownText();
-        showMainState();
-        showStatus(`Updated ${msg.count} layer(s) → ${getFullValue(msg.sequence)}`, 'success');
-      }
-
-      if (msg.type === 'sequence-reset') {
-        selectedSequence = msg.sequence;
-        updateDropdownText();
-        showMainState();
-        showStatus(`Set to ${getFullValue(msg.sequence)}`, 'info');
+      if (msg.type === 'stamped') {
+        showStatus(`Stamped: ${msg.stampedValue}`, 'success');
       }
 
       if (msg.type === 'error') {
         showStatus(msg.message, 'error');
       }
 
-      if (msg.type === 'info') {
-        showStatus(msg.message, 'info');
+      if (msg.type === 'reset-done') {
+        showStatus(`Reset to ${getFullValue(msg.sequence)}`, 'info');
       }
     };
 
-    // ----- UI State Functions -----
+    function getFullValue(seq) {
+      return (seq.prefix || '') + seq.nextValue;
+    }
+
     function showEmptyState() {
       emptyState.classList.remove('hidden');
       createForm.classList.add('hidden');
-      confirmDelete.classList.add('hidden');
       mainState.classList.add('hidden');
     }
 
-    function showMainState() {
+    function showMainState(msg) {
       emptyState.classList.add('hidden');
       createForm.classList.add('hidden');
-      confirmDelete.classList.add('hidden');
       mainState.classList.remove('hidden');
 
+      // Populate dropdown
+      seqSelect.innerHTML = sequences.map(s => {
+        const full = (s.prefix || '') + s.nextValue;
+        const mode = s.mode === 'compliance' ? '🔒' : '✏️';
+        return `<option value="${s.id}" ${s.id === msg.selectedId ? 'selected' : ''}>${s.name} ${mode}</option>`;
+      }).join('');
+
+      // Update info
       if (selectedSequence) {
-        currentValueEl.textContent = getFullValue(selectedSequence);
-        nextValueEl.textContent = getNextFullValue(selectedSequence);
-        updateBtn.textContent = `Update ${selectedSequence.name}`;
+        seqModeBadge.textContent = selectedSequence.mode === 'compliance' ? 'Compliance' : 'Design';
+        seqModeBadge.className = 'mode-badge ' + (selectedSequence.mode === 'compliance' ? 'mode-compliance' : 'mode-design');
+
+        nextValueEl.textContent = getFullValue(selectedSequence);
+
+        if (selectedSequence.mode === 'compliance') {
+          highestUsedEl.textContent = `Highest used: ${selectedSequence.prefix}${selectedSequence.highestUsed}`;
+          highestUsedEl.classList.remove('hidden');
+          resetSection.classList.add('hidden');
+        } else {
+          highestUsedEl.classList.add('hidden');
+          resetSection.classList.remove('hidden');
+        }
+
+        // Update buttons with sequence name
+        linkStampBtn.textContent = `Link and Stamp ${getFullValue(selectedSequence)}`;
+        stampBtn.textContent = `Stamp ${getFullValue(selectedSequence)}`;
       }
+
+      // Show appropriate selection state
+      hideAllStates();
+
+      if (msg.state === 'none') {
+        stateNone.classList.remove('hidden');
+      } else if (msg.state === 'not-text') {
+        stateNotText.classList.remove('hidden');
+      } else if (msg.state === 'unlinked') {
+        stateUnlinked.classList.remove('hidden');
+      } else if (msg.state === 'needs-stamp') {
+        stateNeedsStamp.classList.remove('hidden');
+        needsStampText.textContent = msg.isDuplicate
+          ? 'Duplicate detected. Needs unique number.'
+          : 'Linked but not stamped yet.';
+      } else if (msg.state === 'stamped') {
+        stateStamped.classList.remove('hidden');
+        stampedValueEl.textContent = msg.stampedValue;
+
+        // Show/hide re-stamp option based on mode
+        if (msg.sequence && msg.sequence.mode === 'compliance') {
+          complianceWarning.classList.remove('hidden');
+        } else {
+          complianceWarning.classList.add('hidden');
+        }
+      } else if (msg.state === 'broken-link') {
+        stateBroken.classList.remove('hidden');
+      }
+    }
+
+    function hideAllStates() {
+      stateNone.classList.add('hidden');
+      stateNotText.classList.add('hidden');
+      stateUnlinked.classList.add('hidden');
+      stateNeedsStamp.classList.add('hidden');
+      stateStamped.classList.add('hidden');
+      stateBroken.classList.add('hidden');
     }
 
     function showCreateForm() {
       emptyState.classList.add('hidden');
       createForm.classList.remove('hidden');
-      confirmDelete.classList.add('hidden');
       mainState.classList.add('hidden');
       seqNameInput.value = '';
       seqPrefixInput.value = '';
       seqStartInput.value = '';
       document.querySelector('input[name="seq-type"][value="number"]').checked = true;
-      updateCreatePreview();
+      document.querySelector('input[name="seq-mode"][value="compliance"]').checked = true;
       seqNameInput.focus();
     }
 
@@ -580,205 +641,102 @@
       createForm.classList.add('hidden');
     }
 
-    function showConfirmDelete(id, name) {
-      deleteTargetId = id;
-      deleteNameEl.textContent = name;
-      confirmDelete.classList.remove('hidden');
-      mainState.classList.add('hidden');
-    }
-
-    function hideConfirmDelete() {
-      confirmDelete.classList.add('hidden');
-      deleteTargetId = null;
-    }
-
     function showStatus(message, type) {
       statusEl.textContent = message;
       statusEl.className = 'status ' + type;
-
       if (type !== 'error') {
-        setTimeout(() => {
-          statusEl.className = 'status';
-        }, 3000);
+        setTimeout(() => { statusEl.className = 'status'; }, 3000);
       }
     }
 
-    // ----- Dropdown Functions -----
-    function populateDropdown(seqs, selectedId) {
-      sequenceSelect.innerHTML = seqs.map(s =>
-        `<option value="${s.id}" ${s.id === selectedId ? 'selected' : ''}>${s.name} (${getFullValue(s)})</option>`
-      ).join('');
-    }
-
-    function updateDropdownText() {
-      const option = sequenceSelect.querySelector(`option[value="${selectedSequence.id}"]`);
-      if (option) {
-        option.textContent = `${selectedSequence.name} (${getFullValue(selectedSequence)})`;
-      }
-    }
-
-    // ----- Value Formatting -----
-    function getFullValue(sequence) {
-      const prefix = sequence.prefix || '';
-      return prefix + sequence.value;
-    }
-
-    function getNextFullValue(sequence) {
-      const prefix = sequence.prefix || '';
-      return prefix + incrementValue(sequence);
-    }
-
-    function incrementValue(sequence) {
-      if (sequence.type === 'letter') {
-        return incrementLetter(sequence.value);
-      } else {
-        return incrementNumber(sequence.value);
-      }
-    }
-
-    function incrementNumber(value) {
-      const num = parseInt(value, 10);
-      return (num + 1).toString().padStart(value.length, '0');
-    }
-
-    function incrementLetter(value) {
-      const chars = value.toUpperCase().split('');
-      let i = chars.length - 1;
-
-      while (i >= 0) {
-        if (chars[i] === 'Z') {
-          chars[i] = 'A';
-          i--;
-        } else {
-          chars[i] = String.fromCharCode(chars[i].charCodeAt(0) + 1);
-          return chars.join('');
-        }
-      }
-      return 'A' + chars.join('');
-    }
-
-    // ----- Create Form Preview -----
-    function updateCreatePreview() {
-      const prefix = seqPrefixInput.value;
-      const value = seqStartInput.value || '0001';
-      const type = document.querySelector('input[name="seq-type"]:checked').value;
-
-      const current = prefix + value;
-      const nextVal = type === 'letter' ? incrementLetter(value || 'A') : incrementNumber(value || '0001');
-      const next = prefix + nextVal;
-
-      formatPreview.innerHTML = `Preview: <strong>${current}</strong> → <strong>${next}</strong>`;
-    }
-
-    // ----- Event Handlers -----
-
-    // Dropdown change
-    sequenceSelect.onchange = () => {
-      parent.postMessage({
-        pluginMessage: { type: 'select-sequence', id: sequenceSelect.value }
-      }, '*');
+    // Event handlers
+    seqSelect.onchange = () => {
+      parent.postMessage({ pluginMessage: { type: 'select-sequence', id: seqSelect.value } }, '*');
     };
 
-    // Add button
     addBtn.onclick = showCreateForm;
     createFirstBtn.onclick = showCreateForm;
 
-    // Delete button
     deleteBtn.onclick = () => {
-      if (selectedSequence) {
-        showConfirmDelete(selectedSequence.id, selectedSequence.name);
+      if (selectedSequence && confirm(`Delete "${selectedSequence.name}"?`)) {
+        parent.postMessage({ pluginMessage: { type: 'delete-sequence', id: selectedSequence.id } }, '*');
       }
     };
 
-    cancelDelete.onclick = () => {
-      hideConfirmDelete();
-      showMainState();
-    };
-
-    doDelete.onclick = () => {
-      if (deleteTargetId) {
-        parent.postMessage({
-          pluginMessage: { type: 'delete-sequence', id: deleteTargetId }
-        }, '*');
-      }
-    };
-
-    // Create form
     cancelCreate.onclick = () => {
       if (sequences.length === 0) {
         showEmptyState();
       } else {
         hideCreateForm();
-        showMainState();
+        // Request current state
+        parent.postMessage({ pluginMessage: { type: 'select-sequence', id: seqSelect.value } }, '*');
       }
     };
 
     confirmCreate.onclick = () => {
       const name = seqNameInput.value.trim();
       const prefix = seqPrefixInput.value.trim();
-      const value = seqStartInput.value.trim();
+      const startValue = seqStartInput.value.trim();
       const type = document.querySelector('input[name="seq-type"]:checked').value;
+      const mode = document.querySelector('input[name="seq-mode"]:checked').value;
 
-      if (!name) {
-        showStatus('Please enter a name', 'error');
+      if (!name) { showStatus('Enter a name', 'error'); return; }
+      if (!startValue) { showStatus('Enter a start value', 'error'); return; }
+
+      if (type === 'number' && !/^\d+$/.test(startValue)) {
+        showStatus('Number type needs numeric value', 'error');
         return;
       }
 
-      if (!value) {
-        showStatus('Please enter a start value', 'error');
-        return;
-      }
-
-      // Validate value matches type
-      if (type === 'number' && !/^\d+$/.test(value)) {
-        showStatus('Number sequences need numeric values', 'error');
-        return;
-      }
-
-      if (type === 'letter' && !/^[A-Za-z]+$/.test(value)) {
-        showStatus('Letter sequences need alphabetic values', 'error');
+      if (type === 'letter' && !/^[A-Za-z]+$/.test(startValue)) {
+        showStatus('Letter type needs alphabetic value', 'error');
         return;
       }
 
       parent.postMessage({
         pluginMessage: {
           type: 'create-sequence',
-          name: name,
-          prefix: prefix,
-          value: type === 'letter' ? value.toUpperCase() : value,
-          sequenceType: type
+          name,
+          prefix,
+          startValue: type === 'letter' ? startValue.toUpperCase() : startValue,
+          sequenceType: type,
+          mode
         }
       }, '*');
     };
 
-    // Update button
-    updateBtn.onclick = () => {
+    linkStampBtn.onclick = () => {
       if (!selectedSequence) return;
-
       parent.postMessage({
-        pluginMessage: { type: 'update', sequenceId: selectedSequence.id }
+        pluginMessage: { type: 'link-and-stamp', sequenceId: selectedSequence.id }
       }, '*');
     };
 
-    // Reset
+    stampBtn.onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'stamp' } }, '*');
+    };
+
+    unlinkBtn.onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'unlink' } }, '*');
+    };
+
+    relinkBtn.onclick = () => {
+      if (!selectedSequence) return;
+      parent.postMessage({
+        pluginMessage: { type: 'relink', newSequenceId: selectedSequence.id }
+      }, '*');
+    };
+
+    clearLinkBtn.onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'unlink' } }, '*');
+    };
+
     resetBtn.onclick = () => {
       const value = resetInput.value.trim();
+      if (!value || !selectedSequence) return;
 
-      if (!value) {
-        showStatus('Please enter a value', 'error');
-        return;
-      }
-
-      if (!selectedSequence) return;
-
-      // Validate value matches sequence type
       if (selectedSequence.type === 'number' && !/^\d+$/.test(value)) {
-        showStatus('This sequence needs numeric values', 'error');
-        return;
-      }
-
-      if (selectedSequence.type === 'letter' && !/^[A-Za-z]+$/.test(value)) {
-        showStatus('This sequence needs alphabetic values', 'error');
+        showStatus('Enter a numeric value', 'error');
         return;
       }
 
@@ -793,18 +751,11 @@
       resetInput.value = '';
     };
 
-    // Enter key support
+    // Enter key
     seqNameInput.onkeypress = (e) => { if (e.key === 'Enter') seqPrefixInput.focus(); };
     seqPrefixInput.onkeypress = (e) => { if (e.key === 'Enter') seqStartInput.focus(); };
     seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
     resetInput.onkeypress = (e) => { if (e.key === 'Enter') resetBtn.click(); };
-
-    // Live preview updates
-    seqPrefixInput.oninput = updateCreatePreview;
-    seqStartInput.oninput = updateCreatePreview;
-    document.querySelectorAll('input[name="seq-type"]').forEach(radio => {
-      radio.onchange = updateCreatePreview;
-    });
   </script>
 </body>
 </html>
