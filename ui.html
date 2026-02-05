@@ -283,6 +283,35 @@
       flex: 1;
     }
 
+    .form-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .form-row .form-group.small {
+      flex: 0 0 70px;
+    }
+
+    .format-preview {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #666;
+      text-align: center;
+    }
+
+    .format-preview strong {
+      color: #333;
+      font-weight: 600;
+    }
+
     /* ----- Confirm Delete ----- */
     .confirm-delete {
       background: #fff5f5;
@@ -327,7 +356,7 @@
     <div class="form-title">New Sequence</div>
     <div class="form-group">
       <label class="form-label">Name</label>
-      <input type="text" id="seq-name" class="form-input" placeholder="e.g., Invoice#">
+      <input type="text" id="seq-name" class="form-input" placeholder="e.g., Quote#">
     </div>
     <div class="form-group">
       <label class="form-label">Type</label>
@@ -342,9 +371,22 @@
         </label>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Starting Value</label>
-      <input type="text" id="seq-start" class="form-input" placeholder="e.g., 5100 or A">
+    <div class="form-row">
+      <div class="form-group small">
+        <label class="form-label">Prefix</label>
+        <input type="text" id="seq-prefix" class="form-input" placeholder="Q">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Starting Value</label>
+        <input type="text" id="seq-start" class="form-input" placeholder="0001">
+      </div>
+      <div class="form-group small">
+        <label class="form-label">Suffix</label>
+        <input type="text" id="seq-suffix" class="form-input" placeholder="-A">
+      </div>
+    </div>
+    <div id="format-preview" class="format-preview">
+      Preview: <strong>Q0001</strong> → <strong>Q0002</strong>
     </div>
     <div class="form-buttons">
       <button id="cancel-create" class="btn btn-secondary">Cancel</button>
@@ -426,7 +468,10 @@
     const resetBtn = document.getElementById('reset-btn');
 
     const seqNameInput = document.getElementById('seq-name');
+    const seqPrefixInput = document.getElementById('seq-prefix');
     const seqStartInput = document.getElementById('seq-start');
+    const seqSuffixInput = document.getElementById('seq-suffix');
+    const formatPreview = document.getElementById('format-preview');
     const cancelCreate = document.getElementById('cancel-create');
     const confirmCreate = document.getElementById('confirm-create');
     const createFirstBtn = document.getElementById('create-first-btn');
@@ -483,14 +528,14 @@
         selectedSequence = msg.sequence;
         updateDropdownText();
         showMainState();
-        showStatus(`Updated ${msg.count} layer(s) → ${msg.sequence.value}`, 'success');
+        showStatus(`Updated ${msg.count} layer(s) → ${getFullValue(msg.sequence)}`, 'success');
       }
 
       if (msg.type === 'sequence-reset') {
         selectedSequence = msg.sequence;
         updateDropdownText();
         showMainState();
-        showStatus(`Set to ${msg.sequence.value}`, 'info');
+        showStatus(`Set to ${getFullValue(msg.sequence)}`, 'info');
       }
 
       if (msg.type === 'error') {
@@ -517,8 +562,8 @@
       mainState.classList.remove('hidden');
 
       if (selectedSequence) {
-        currentValueEl.textContent = selectedSequence.value;
-        nextValueEl.textContent = getNextValue(selectedSequence);
+        currentValueEl.textContent = getFullValue(selectedSequence);
+        nextValueEl.textContent = getNextFullValue(selectedSequence);
         updateBtn.textContent = `Update ${selectedSequence.name}`;
       }
     }
@@ -529,8 +574,11 @@
       confirmDelete.classList.add('hidden');
       mainState.classList.add('hidden');
       seqNameInput.value = '';
+      seqPrefixInput.value = '';
       seqStartInput.value = '';
+      seqSuffixInput.value = '';
       document.querySelector('input[name="seq-type"][value="number"]').checked = true;
+      updateCreatePreview();
       seqNameInput.focus();
     }
 
@@ -564,19 +612,31 @@
     // ----- Dropdown Functions -----
     function populateDropdown(seqs, selectedId) {
       sequenceSelect.innerHTML = seqs.map(s =>
-        `<option value="${s.id}" ${s.id === selectedId ? 'selected' : ''}>${s.name} (${s.value})</option>`
+        `<option value="${s.id}" ${s.id === selectedId ? 'selected' : ''}>${s.name} (${getFullValue(s)})</option>`
       ).join('');
     }
 
     function updateDropdownText() {
       const option = sequenceSelect.querySelector(`option[value="${selectedSequence.id}"]`);
       if (option) {
-        option.textContent = `${selectedSequence.name} (${selectedSequence.value})`;
+        option.textContent = `${selectedSequence.name} (${getFullValue(selectedSequence)})`;
       }
     }
 
-    // ----- Increment Preview -----
-    function getNextValue(sequence) {
+    // ----- Value Formatting -----
+    function getFullValue(sequence) {
+      const prefix = sequence.prefix || '';
+      const suffix = sequence.suffix || '';
+      return prefix + sequence.value + suffix;
+    }
+
+    function getNextFullValue(sequence) {
+      const prefix = sequence.prefix || '';
+      const suffix = sequence.suffix || '';
+      return prefix + incrementValue(sequence) + suffix;
+    }
+
+    function incrementValue(sequence) {
       if (sequence.type === 'letter') {
         return incrementLetter(sequence.value);
       } else {
@@ -603,6 +663,20 @@
         }
       }
       return 'A' + chars.join('');
+    }
+
+    // ----- Create Form Preview -----
+    function updateCreatePreview() {
+      const prefix = seqPrefixInput.value;
+      const value = seqStartInput.value || '0001';
+      const suffix = seqSuffixInput.value;
+      const type = document.querySelector('input[name="seq-type"]:checked').value;
+
+      const current = prefix + value + suffix;
+      const nextVal = type === 'letter' ? incrementLetter(value || 'A') : incrementNumber(value || '0001');
+      const next = prefix + nextVal + suffix;
+
+      formatPreview.innerHTML = `Preview: <strong>${current}</strong> → <strong>${next}</strong>`;
     }
 
     // ----- Event Handlers -----
@@ -650,7 +724,9 @@
 
     confirmCreate.onclick = () => {
       const name = seqNameInput.value.trim();
+      const prefix = seqPrefixInput.value.trim();
       const value = seqStartInput.value.trim();
+      const suffix = seqSuffixInput.value.trim();
       const type = document.querySelector('input[name="seq-type"]:checked').value;
 
       if (!name) {
@@ -678,7 +754,9 @@
         pluginMessage: {
           type: 'create-sequence',
           name: name,
+          prefix: prefix,
           value: type === 'letter' ? value.toUpperCase() : value,
+          suffix: suffix,
           sequenceType: type
         }
       }, '*');
@@ -727,9 +805,19 @@
     };
 
     // Enter key support
-    seqNameInput.onkeypress = (e) => { if (e.key === 'Enter') seqStartInput.focus(); };
-    seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
+    seqNameInput.onkeypress = (e) => { if (e.key === 'Enter') seqPrefixInput.focus(); };
+    seqPrefixInput.onkeypress = (e) => { if (e.key === 'Enter') seqStartInput.focus(); };
+    seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') seqSuffixInput.focus(); };
+    seqSuffixInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
     resetInput.onkeypress = (e) => { if (e.key === 'Enter') resetBtn.click(); };
+
+    // Live preview updates
+    seqPrefixInput.oninput = updateCreatePreview;
+    seqStartInput.oninput = updateCreatePreview;
+    seqSuffixInput.oninput = updateCreatePreview;
+    document.querySelectorAll('input[name="seq-type"]').forEach(radio => {
+      radio.onchange = updateCreatePreview;
+    });
   </script>
 </body>
 </html>

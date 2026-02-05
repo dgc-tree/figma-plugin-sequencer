@@ -9,6 +9,7 @@
 // - Multiple named sequences (Invoice#, Estimate#, PO#, etc.)
 // - Number sequences (5100 → 5101 → 5102)
 // - Letter sequences (A → B → ... → Z → AA → AB)
+// - Optional prefix/suffix (Q0001, INV-100-A, etc.)
 // - Batch updates all matching text layers
 // - Persists between sessions
 // ============================================================
@@ -67,7 +68,9 @@ function migrateIfNeeded() {
       const defaultSequence = {
         id: generateId(),
         name: 'Invoice#',
+        prefix: '',
         value: oldValue,
+        suffix: '',
         type: 'number'
       };
 
@@ -126,6 +129,21 @@ function incrementValue(sequence) {
   }
 }
 
+// Get the full formatted value: prefix + value + suffix
+// Example: prefix="Q", value="0001", suffix="-A" → "Q0001-A"
+function getFullValue(sequence) {
+  const prefix = sequence.prefix || '';
+  const suffix = sequence.suffix || '';
+  return prefix + sequence.value + suffix;
+}
+
+// Get the next full formatted value
+function getNextFullValue(sequence) {
+  const prefix = sequence.prefix || '';
+  const suffix = sequence.suffix || '';
+  return prefix + incrementValue(sequence) + suffix;
+}
+
 // ----------------------------------------------------------
 // TEXT NODE SEARCH
 // Finds all text layers matching a specific value
@@ -158,7 +176,7 @@ function findTextNodesWithValue(value) {
 // ----------------------------------------------------------
 // SHOW THE UI
 // ----------------------------------------------------------
-figma.showUI(__html__, { width: 240, height: 320 });
+figma.showUI(__html__, { width: 260, height: 340 });
 
 // ----------------------------------------------------------
 // INITIALIZATION
@@ -220,7 +238,9 @@ figma.ui.onmessage = async (msg) => {
     const newSeq = {
       id: generateId(),
       name: msg.name.trim(),
+      prefix: (msg.prefix || '').trim(),
       value: msg.value.trim(),
+      suffix: (msg.suffix || '').trim(),
       type: msg.sequenceType // 'number' or 'letter'
     };
 
@@ -271,16 +291,17 @@ figma.ui.onmessage = async (msg) => {
       return;
     }
 
-    const currentValue = sequence.value;
-    const nextValue = incrementValue(sequence);
+    // Get full formatted values (with prefix/suffix)
+    const currentFullValue = getFullValue(sequence);
+    const nextFullValue = getNextFullValue(sequence);
 
-    // Find all text layers with the current value
-    const matchingNodes = findTextNodesWithValue(currentValue);
+    // Find all text layers with the current full value
+    const matchingNodes = findTextNodesWithValue(currentFullValue);
 
     if (matchingNodes.length === 0) {
       figma.ui.postMessage({
         type: 'info',
-        message: `No text layers found with "${currentValue}"`
+        message: `No text layers found with "${currentFullValue}"`
       });
       return;
     }
@@ -289,11 +310,11 @@ figma.ui.onmessage = async (msg) => {
     for (const node of matchingNodes) {
       // Must load font before changing text (Figma API requirement)
       await figma.loadFontAsync(node.fontName);
-      node.characters = nextValue;
+      node.characters = nextFullValue;
     }
 
-    // Update and save the sequence
-    sequence.value = nextValue;
+    // Update and save the sequence (only the value part increments)
+    sequence.value = incrementValue(sequence);
     saveSequences(sequences);
 
     figma.ui.postMessage({
