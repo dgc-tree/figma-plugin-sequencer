@@ -394,8 +394,12 @@ figma.ui.onmessage = async (msg) => {
     // Get the next value to stamp
     const stampValue = getFullValue(sequence);
 
-    // Load font and update text
-    await figma.loadFontAsync(node.fontName);
+    // Load font and update text (handle mixed fonts)
+    let fontName = node.fontName;
+    if (fontName === figma.mixed) {
+      fontName = node.getRangeFontName(0, 1);
+    }
+    await figma.loadFontAsync(fontName);
     node.characters = stampValue;
 
     // Store link data on the node
@@ -462,7 +466,12 @@ figma.ui.onmessage = async (msg) => {
 
     const stampValue = getFullValue(sequence);
 
-    await figma.loadFontAsync(node.fontName);
+    // Load font (handle mixed fonts)
+    let fontName = node.fontName;
+    if (fontName === figma.mixed) {
+      fontName = node.getRangeFontName(0, 1);
+    }
+    await figma.loadFontAsync(fontName);
     node.characters = stampValue;
 
     setNodeLinkData(node, sequence.id, stampValue);
