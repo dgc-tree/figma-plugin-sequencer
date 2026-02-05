@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequencer – Figma Plugin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #FF455B;
+      --primary-dark: #e63950;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.6;
+      background: var(--gray-50);
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 18px;
+      color: var(--gray-900);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .nav-link {
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover {
+      color: var(--gray-900);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 80px 24px 100px;
+      text-align: center;
+      background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      background: #ffe8eb;
+      color: var(--primary);
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--gray-500);
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .cta-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .cta-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ===== DEMO ===== */
+    .demo {
+      max-width: 700px;
+      margin: -40px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .demo-window {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    .demo-header {
+      background: var(--gray-100);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .demo-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gray-300);
+    }
+
+    .demo-dot:nth-child(1) { background: #ef4444; }
+    .demo-dot:nth-child(2) { background: #eab308; }
+    .demo-dot:nth-child(3) { background: #22c55e; }
+
+    .demo-title {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+
+    .demo-content {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .number-display {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .number-box {
+      text-align: center;
+    }
+
+    .number-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      margin-bottom: 6px;
+    }
+
+    .number-value {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .number-value.next {
+      color: var(--primary);
+    }
+
+    .arrow {
+      font-size: 28px;
+      color: var(--gray-300);
+    }
+
+    .demo-button {
+      padding: 12px 24px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ===== FEATURES ===== */
+    .features {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .features-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    .features-header p {
+      color: var(--gray-500);
+      font-size: 16px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 28px;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: #ffe8eb;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--gray-500);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ===== HOW IT WORKS ===== */
+    .how-it-works {
+      padding: 80px 24px 100px;
+      background: white;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .how-it-works-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 48px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .step-card {
+      background: var(--gray-50);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      background: white;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .step-number {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .step-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      color: var(--gray-500);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    footer p {
+      color: var(--gray-400);
+      font-size: 13px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 640px) {
+      .hero {
+        padding: 60px 24px 80px;
+      }
+
+      .hero p {
+        font-size: 16px;
+      }
+
+      .demo-content {
+        padding: 24px;
+      }
+
+      .number-value {
+        font-size: 32px;
+      }
+
+      .number-display {
+        gap: 16px;
+      }
+
+      .features {
+        padding: 60px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <a href="#" class="logo">
+        <div class="logo-icon">#</div>
+        Sequencer
+      </a>
+      <a href="https://github.com" class="nav-link">GitHub</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">Figma Plugin</div>
+    <h1>Sequence numbers and letters<br>in seconds</h1>
+    <p>Stop manually updating sequences across your designs. One click updates every matching value on the page.</p>
+    <a href="https://www.figma.com/community/plugins" class="cta-button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Install for Figma
+    </a>
+  </section>
+
+  <!-- Demo Window -->
+  <div class="demo">
+    <div class="demo-window">
+      <div class="demo-header">
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-title">Sequencer</div>
+      </div>
+      <div class="demo-content">
+        <div class="number-display">
+          <div class="number-box">
+            <div class="number-label">Current</div>
+            <div class="number-value">5100</div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="number-box">
+            <div class="number-label">Next</div>
+            <div class="number-value next">5101</div>
+          </div>
+        </div>
+        <button class="demo-button">Update Sequence</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-header">
+      <h2>Simple by design</h2>
+      <p>No accounts. No cloud sync. Just a tool that does one thing well.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Batch updates</h3>
+        <p>Finds and updates every text layer on the page that matches your sequence. Headers, footers, anywhere.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💾</div>
+        <h3>Remembers your place</h3>
+        <p>Saves your last sequence to the document. Come back tomorrow and pick up right where you left off.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Smart detection</h3>
+        <p>Select a text layer with your current value and the plugin auto-detects it. Or just type one in manually.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Zero configuration</h3>
+        <p>No settings. No preferences. No cloud accounts. Install it and start using it in under 10 seconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Fully local</h3>
+        <p>All data stays in your Figma file. Nothing is sent to external servers. Privacy by default.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">↩️</div>
+        <h3>Manual override</h3>
+        <p>Need to jump to a specific number? The reset field lets you set any starting point you want.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <div class="how-it-works-content">
+      <h2>How it works</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <div class="step-icon">🔌</div>
+          <h3>Open the plugin</h3>
+          <p>Run Sequencer from the Figma plugins menu. Optionally select a text layer first.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <div class="step-icon">👀</div>
+          <h3>Review the sequence</h3>
+          <p>See your current value and what it will change to. First time? Enter a starting value.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <div class="step-icon">✨</div>
+          <h3>Click update</h3>
+          <p>Every matching text layer updates instantly. The new value is saved for next time.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">4</div>
+          <div class="step-icon">🔁</div>
+          <h3>Repeat as needed</h3>
+          <p>Next in the sequence? Run again. It remembers where you left off.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>Built for designers who play with numbers.</p>
+  </footer>
+
+</body>
+</html>

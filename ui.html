@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* ============================================================
+       SEQUENCER UI STYLES
+       ============================================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 12px;
+      padding: 16px;
+      background: #ffffff;
+      color: #333;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ----- Sequence Selector ----- */
+    .sequence-header {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .sequence-select {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      background: white;
+      cursor: pointer;
+    }
+
+    .sequence-select:focus {
+      outline: none;
+      border-color: #18a0fb;
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background: #f5f5f5;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      transition: all 0.15s;
+    }
+
+    .btn-icon:hover {
+      background: #e8e8e8;
+      color: #333;
+    }
+
+    .btn-icon.danger:hover {
+      background: #ffebe6;
+      color: #c9372c;
+      border-color: #f5c2c7;
+    }
+
+    /* ----- Number Display ----- */
+    .number-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    .number-box {
+      text-align: center;
+    }
+
+    .number-label {
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .number-value {
+      font-size: 28px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .number-value.next {
+      color: #18a0fb;
+    }
+
+    .arrow {
+      font-size: 18px;
+      color: #999;
+    }
+
+    /* ----- Buttons ----- */
+    .btn {
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: #18a0fb;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #0d8de5;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    /* ----- Reset Section ----- */
+    .reset-section {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+    }
+
+    .reset-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .reset-label {
+      font-size: 11px;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .input {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #18a0fb;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 11px;
+      width: auto;
+    }
+
+    /* ----- Status Message ----- */
+    .status {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      text-align: center;
+      display: none;
+    }
+
+    .status.success {
+      display: block;
+      background: #e6f7ed;
+      color: #1a7f4b;
+    }
+
+    .status.error {
+      display: block;
+      background: #ffebe6;
+      color: #c9372c;
+    }
+
+    .status.info {
+      display: block;
+      background: #e9f2ff;
+      color: #0055cc;
+    }
+
+    /* ----- Empty State ----- */
+    .empty-state {
+      text-align: center;
+      padding: 40px 16px;
+    }
+
+    .empty-state p {
+      color: #666;
+      margin-bottom: 16px;
+    }
+
+    /* ----- Create Form ----- */
+    .create-form {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 12px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #18a0fb;
+    }
+
+    .type-selector {
+      display: flex;
+      gap: 16px;
+    }
+
+    .type-option {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .type-option input {
+      cursor: pointer;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .form-buttons .btn {
+      flex: 1;
+    }
+
+    /* ----- Confirm Delete ----- */
+    .confirm-delete {
+      background: #fff5f5;
+      border: 1px solid #f5c2c7;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .confirm-delete p {
+      margin-bottom: 12px;
+      color: #c9372c;
+      font-size: 12px;
+    }
+
+    .confirm-delete .btn {
+      width: auto;
+      padding: 8px 16px;
+    }
+
+    .btn-danger {
+      background: #c9372c;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #ae2a2a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Empty State: No sequences yet -->
+  <div id="empty-state" class="empty-state hidden">
+    <p>No sequences yet.<br>Create one to get started!</p>
+    <button id="create-first-btn" class="btn btn-primary">Create Sequence</button>
+  </div>
+
+  <!-- Create Form -->
+  <div id="create-form" class="create-form hidden">
+    <div class="form-title">New Sequence</div>
+    <div class="form-group">
+      <label class="form-label">Name</label>
+      <input type="text" id="seq-name" class="form-input" placeholder="e.g., Invoice#">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <div class="type-selector">
+        <label class="type-option">
+          <input type="radio" name="seq-type" value="number" checked>
+          Number
+        </label>
+        <label class="type-option">
+          <input type="radio" name="seq-type" value="letter">
+          Letter
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Starting Value</label>
+      <input type="text" id="seq-start" class="form-input" placeholder="e.g., 5100 or A">
+    </div>
+    <div class="form-buttons">
+      <button id="cancel-create" class="btn btn-secondary">Cancel</button>
+      <button id="confirm-create" class="btn btn-primary">Create</button>
+    </div>
+  </div>
+
+  <!-- Confirm Delete -->
+  <div id="confirm-delete" class="confirm-delete hidden">
+    <p>Delete "<span id="delete-name"></span>"?</p>
+    <div style="display: flex; gap: 8px; justify-content: center;">
+      <button id="cancel-delete" class="btn btn-secondary">Cancel</button>
+      <button id="do-delete" class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+
+  <!-- Main State -->
+  <div id="main-state" class="hidden">
+    <!-- Sequence Selector -->
+    <div class="sequence-header">
+      <select id="sequence-select" class="sequence-select"></select>
+      <button id="add-btn" class="btn-icon" title="Add sequence">+</button>
+      <button id="delete-btn" class="btn-icon danger" title="Delete sequence">×</button>
+    </div>
+
+    <!-- Current / Next Display -->
+    <div class="number-display">
+      <div class="number-box">
+        <div class="number-label">Current</div>
+        <div class="number-value" id="current-value">—</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="number-box">
+        <div class="number-label">Next</div>
+        <div class="number-value next" id="next-value">—</div>
+      </div>
+    </div>
+
+    <!-- Update Button -->
+    <button id="update-btn" class="btn btn-primary">Update Sequence</button>
+
+    <!-- Reset Section -->
+    <div class="reset-section">
+      <div class="reset-row">
+        <span class="reset-label">Reset to:</span>
+        <input type="text" id="reset-input" class="input" placeholder="Enter value">
+        <button id="reset-btn" class="btn btn-secondary btn-small">Set</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Message -->
+  <div id="status" class="status"></div>
+
+  <script>
+    // ============================================================
+    // SEQUENCER UI LOGIC
+    // ============================================================
+
+    // ----- State -----
+    let sequences = [];
+    let selectedSequence = null;
+    let deleteTargetId = null;
+
+    // ----- DOM Elements -----
+    const emptyState = document.getElementById('empty-state');
+    const createForm = document.getElementById('create-form');
+    const confirmDelete = document.getElementById('confirm-delete');
+    const mainState = document.getElementById('main-state');
+    const statusEl = document.getElementById('status');
+
+    const sequenceSelect = document.getElementById('sequence-select');
+    const addBtn = document.getElementById('add-btn');
+    const deleteBtn = document.getElementById('delete-btn');
+    const currentValueEl = document.getElementById('current-value');
+    const nextValueEl = document.getElementById('next-value');
+    const updateBtn = document.getElementById('update-btn');
+    const resetInput = document.getElementById('reset-input');
+    const resetBtn = document.getElementById('reset-btn');
+
+    const seqNameInput = document.getElementById('seq-name');
+    const seqStartInput = document.getElementById('seq-start');
+    const cancelCreate = document.getElementById('cancel-create');
+    const confirmCreate = document.getElementById('confirm-create');
+    const createFirstBtn = document.getElementById('create-first-btn');
+
+    const deleteNameEl = document.getElementById('delete-name');
+    const cancelDelete = document.getElementById('cancel-delete');
+    const doDelete = document.getElementById('do-delete');
+
+    // ----- Message Handlers -----
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+
+      if (msg.type === 'init') {
+        sequences = msg.sequences || [];
+
+        if (sequences.length === 0) {
+          showEmptyState();
+        } else {
+          selectedSequence = msg.selectedSequence;
+          populateDropdown(sequences, msg.selectedId);
+          showMainState();
+        }
+      }
+
+      if (msg.type === 'sequence-selected') {
+        selectedSequence = msg.sequence;
+        showMainState();
+      }
+
+      if (msg.type === 'sequence-created') {
+        sequences = msg.sequences;
+        selectedSequence = msg.selectedSequence;
+        populateDropdown(sequences, msg.selectedId);
+        hideCreateForm();
+        showMainState();
+        showStatus('Sequence created', 'success');
+      }
+
+      if (msg.type === 'sequence-deleted') {
+        sequences = msg.sequences;
+        selectedSequence = msg.selectedSequence;
+        hideConfirmDelete();
+
+        if (sequences.length === 0) {
+          showEmptyState();
+        } else {
+          populateDropdown(sequences, msg.selectedId);
+          showMainState();
+        }
+        showStatus('Sequence deleted', 'info');
+      }
+
+      if (msg.type === 'updated') {
+        selectedSequence = msg.sequence;
+        updateDropdownText();
+        showMainState();
+        showStatus(`Updated ${msg.count} layer(s) → ${msg.sequence.value}`, 'success');
+      }
+
+      if (msg.type === 'sequence-reset') {
+        selectedSequence = msg.sequence;
+        updateDropdownText();
+        showMainState();
+        showStatus(`Set to ${msg.sequence.value}`, 'info');
+      }
+
+      if (msg.type === 'error') {
+        showStatus(msg.message, 'error');
+      }
+
+      if (msg.type === 'info') {
+        showStatus(msg.message, 'info');
+      }
+    };
+
+    // ----- UI State Functions -----
+    function showEmptyState() {
+      emptyState.classList.remove('hidden');
+      createForm.classList.add('hidden');
+      confirmDelete.classList.add('hidden');
+      mainState.classList.add('hidden');
+    }
+
+    function showMainState() {
+      emptyState.classList.add('hidden');
+      createForm.classList.add('hidden');
+      confirmDelete.classList.add('hidden');
+      mainState.classList.remove('hidden');
+
+      if (selectedSequence) {
+        currentValueEl.textContent = selectedSequence.value;
+        nextValueEl.textContent = getNextValue(selectedSequence);
+        updateBtn.textContent = `Update ${selectedSequence.name}`;
+      }
+    }
+
+    function showCreateForm() {
+      emptyState.classList.add('hidden');
+      createForm.classList.remove('hidden');
+      confirmDelete.classList.add('hidden');
+      mainState.classList.add('hidden');
+      seqNameInput.value = '';
+      seqStartInput.value = '';
+      document.querySelector('input[name="seq-type"][value="number"]').checked = true;
+      seqNameInput.focus();
+    }
+
+    function hideCreateForm() {
+      createForm.classList.add('hidden');
+    }
+
+    function showConfirmDelete(id, name) {
+      deleteTargetId = id;
+      deleteNameEl.textContent = name;
+      confirmDelete.classList.remove('hidden');
+      mainState.classList.add('hidden');
+    }
+
+    function hideConfirmDelete() {
+      confirmDelete.classList.add('hidden');
+      deleteTargetId = null;
+    }
+
+    function showStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className = 'status ' + type;
+
+      if (type !== 'error') {
+        setTimeout(() => {
+          statusEl.className = 'status';
+        }, 3000);
+      }
+    }
+
+    // ----- Dropdown Functions -----
+    function populateDropdown(seqs, selectedId) {
+      sequenceSelect.innerHTML = seqs.map(s =>
+        `<option value="${s.id}" ${s.id === selectedId ? 'selected' : ''}>${s.name} (${s.value})</option>`
+      ).join('');
+    }
+
+    function updateDropdownText() {
+      const option = sequenceSelect.querySelector(`option[value="${selectedSequence.id}"]`);
+      if (option) {
+        option.textContent = `${selectedSequence.name} (${selectedSequence.value})`;
+      }
+    }
+
+    // ----- Increment Preview -----
+    function getNextValue(sequence) {
+      if (sequence.type === 'letter') {
+        return incrementLetter(sequence.value);
+      } else {
+        return incrementNumber(sequence.value);
+      }
+    }
+
+    function incrementNumber(value) {
+      const num = parseInt(value, 10);
+      return (num + 1).toString().padStart(value.length, '0');
+    }
+
+    function incrementLetter(value) {
+      const chars = value.toUpperCase().split('');
+      let i = chars.length - 1;
+
+      while (i >= 0) {
+        if (chars[i] === 'Z') {
+          chars[i] = 'A';
+          i--;
+        } else {
+          chars[i] = String.fromCharCode(chars[i].charCodeAt(0) + 1);
+          return chars.join('');
+        }
+      }
+      return 'A' + chars.join('');
+    }
+
+    // ----- Event Handlers -----
+
+    // Dropdown change
+    sequenceSelect.onchange = () => {
+      parent.postMessage({
+        pluginMessage: { type: 'select-sequence', id: sequenceSelect.value }
+      }, '*');
+    };
+
+    // Add button
+    addBtn.onclick = showCreateForm;
+    createFirstBtn.onclick = showCreateForm;
+
+    // Delete button
+    deleteBtn.onclick = () => {
+      if (selectedSequence) {
+        showConfirmDelete(selectedSequence.id, selectedSequence.name);
+      }
+    };
+
+    cancelDelete.onclick = () => {
+      hideConfirmDelete();
+      showMainState();
+    };
+
+    doDelete.onclick = () => {
+      if (deleteTargetId) {
+        parent.postMessage({
+          pluginMessage: { type: 'delete-sequence', id: deleteTargetId }
+        }, '*');
+      }
+    };
+
+    // Create form
+    cancelCreate.onclick = () => {
+      if (sequences.length === 0) {
+        showEmptyState();
+      } else {
+        hideCreateForm();
+        showMainState();
+      }
+    };
+
+    confirmCreate.onclick = () => {
+      const name = seqNameInput.value.trim();
+      const value = seqStartInput.value.trim();
+      const type = document.querySelector('input[name="seq-type"]:checked').value;
+
+      if (!name) {
+        showStatus('Please enter a name', 'error');
+        return;
+      }
+
+      if (!value) {
+        showStatus('Please enter a starting value', 'error');
+        return;
+      }
+
+      // Validate value matches type
+      if (type === 'number' && !/^\d+$/.test(value)) {
+        showStatus('Number sequences need numeric values', 'error');
+        return;
+      }
+
+      if (type === 'letter' && !/^[A-Za-z]+$/.test(value)) {
+        showStatus('Letter sequences need alphabetic values', 'error');
+        return;
+      }
+
+      parent.postMessage({
+        pluginMessage: {
+          type: 'create-sequence',
+          name: name,
+          value: type === 'letter' ? value.toUpperCase() : value,
+          sequenceType: type
+        }
+      }, '*');
+    };
+
+    // Update button
+    updateBtn.onclick = () => {
+      if (!selectedSequence) return;
+
+      parent.postMessage({
+        pluginMessage: { type: 'update', sequenceId: selectedSequence.id }
+      }, '*');
+    };
+
+    // Reset
+    resetBtn.onclick = () => {
+      const value = resetInput.value.trim();
+
+      if (!value) {
+        showStatus('Please enter a value', 'error');
+        return;
+      }
+
+      if (!selectedSequence) return;
+
+      // Validate value matches sequence type
+      if (selectedSequence.type === 'number' && !/^\d+$/.test(value)) {
+        showStatus('This sequence needs numeric values', 'error');
+        return;
+      }
+
+      if (selectedSequence.type === 'letter' && !/^[A-Za-z]+$/.test(value)) {
+        showStatus('This sequence needs alphabetic values', 'error');
+        return;
+      }
+
+      parent.postMessage({
+        pluginMessage: {
+          type: 'reset',
+          sequenceId: selectedSequence.id,
+          value: selectedSequence.type === 'letter' ? value.toUpperCase() : value
+        }
+      }, '*');
+
+      resetInput.value = '';
+    };
+
+    // Enter key support
+    seqNameInput.onkeypress = (e) => { if (e.key === 'Enter') seqStartInput.focus(); };
+    seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
+    resetInput.onkeypress = (e) => { if (e.key === 'Enter') resetBtn.click(); };
+  </script>
+</body>
+</html>
