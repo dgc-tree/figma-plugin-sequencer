@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sequencer – Figma Plugin</title>
+  <title>Sequencer – Auto-increment anything in Figma</title>
+  <meta name="description" content="The smartest way to manage invoice numbers, version codes, and sequential IDs in your Figma designs. Multiple sequences, custom formats, one click updates.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,6 +18,9 @@
     :root {
       --primary: #FF455B;
       --primary-dark: #e63950;
+      --primary-light: #ffe8eb;
+      --accent: #7c3aed;
+      --accent-light: #ede9fe;
       --gray-50: #f9fafb;
       --gray-100: #f3f4f6;
       --gray-200: #e5e7eb;
@@ -97,7 +101,7 @@
     .hero-badge {
       display: inline-block;
       padding: 6px 14px;
-      background: #ffe8eb;
+      background: var(--primary-light);
       color: var(--primary);
       border-radius: 50px;
       font-size: 13px;
@@ -114,11 +118,30 @@
       letter-spacing: -0.02em;
     }
 
-    .hero p {
-      font-size: 18px;
+    .hero-subtitle {
+      font-size: 20px;
       color: var(--gray-500);
-      max-width: 520px;
-      margin: 0 auto 36px;
+      max-width: 600px;
+      margin: 0 auto 16px;
+    }
+
+    .hero-formats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .format-tag {
+      padding: 6px 12px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: 'SF Mono', Monaco, monospace;
+      color: var(--gray-700);
     }
 
     .cta-button {
@@ -147,7 +170,7 @@
 
     /* ===== DEMO ===== */
     .demo {
-      max-width: 700px;
+      max-width: 720px;
       margin: -40px auto 0;
       padding: 0 24px;
       position: relative;
@@ -175,7 +198,6 @@
       width: 12px;
       height: 12px;
       border-radius: 50%;
-      background: var(--gray-300);
     }
 
     .demo-dot:nth-child(1) { background: #ef4444; }
@@ -191,17 +213,49 @@
     }
 
     .demo-content {
-      padding: 40px;
+      padding: 32px 40px;
+    }
+
+    .demo-select {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 24px;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .demo-dropdown {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      background: white;
+      color: var(--gray-800);
+    }
+
+    .demo-icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      background: var(--gray-50);
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
     }
 
     .number-display {
       display: flex;
       align-items: center;
-      gap: 24px;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: var(--gray-50);
+      border-radius: 12px;
     }
 
     .number-box {
@@ -209,7 +263,7 @@
     }
 
     .number-label {
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--gray-400);
@@ -217,9 +271,10 @@
     }
 
     .number-value {
-      font-size: 42px;
+      font-size: 36px;
       font-weight: 700;
       color: var(--gray-800);
+      font-family: 'SF Mono', Monaco, monospace;
     }
 
     .number-value.next {
@@ -227,12 +282,13 @@
     }
 
     .arrow {
-      font-size: 28px;
+      font-size: 24px;
       color: var(--gray-300);
     }
 
     .demo-button {
-      padding: 12px 24px;
+      width: 100%;
+      padding: 14px 24px;
       background: var(--primary);
       color: white;
       border: none;
@@ -242,9 +298,66 @@
       cursor: pointer;
     }
 
+    /* ===== USE CASES ===== */
+    .use-cases {
+      padding: 100px 24px 60px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .use-cases-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .use-cases-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    .use-cases-header p {
+      color: var(--gray-500);
+      font-size: 16px;
+    }
+
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .use-case {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .use-case:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.1);
+    }
+
+    .use-case-format {
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .use-case-label {
+      font-size: 13px;
+      color: var(--gray-500);
+    }
+
     /* ===== FEATURES ===== */
     .features {
-      padding: 100px 24px;
+      padding: 60px 24px 100px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -268,7 +381,7 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
     }
 
@@ -288,7 +401,7 @@
     .feature-icon {
       width: 48px;
       height: 48px;
-      background: #ffe8eb;
+      background: var(--primary-light);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -392,11 +505,32 @@
       }
     }
 
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      padding: 80px 24px;
+      text-align: center;
+      background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .cta-section h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+
     /* ===== FOOTER ===== */
     footer {
       padding: 40px 24px;
       text-align: center;
       border-top: 1px solid var(--gray-200);
+      background: var(--gray-50);
     }
 
     footer p {
@@ -410,7 +544,7 @@
         padding: 60px 24px 80px;
       }
 
-      .hero p {
+      .hero-subtitle {
         font-size: 16px;
       }
 
@@ -419,15 +553,20 @@
       }
 
       .number-value {
-        font-size: 32px;
+        font-size: 28px;
       }
 
       .number-display {
-        gap: 16px;
+        gap: 12px;
+        padding: 16px;
       }
 
       .features {
         padding: 60px 24px;
+      }
+
+      .use-cases-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
   </style>
@@ -447,16 +586,23 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">Figma Plugin</div>
-    <h1>Sequence numbers and letters<br>in seconds</h1>
-    <p>Stop manually updating sequences across your designs. One click updates every matching value on the page.</p>
+    <div class="hero-badge">Free Figma Plugin</div>
+    <h1>Auto-increment anything.<br>Your format, your rules.</h1>
+    <p class="hero-subtitle">Invoices, quotes, versions, revisions—create unlimited sequences with custom prefixes and suffixes. One click updates every instance.</p>
+    <div class="hero-formats">
+      <span class="format-tag">INV-0001</span>
+      <span class="format-tag">Q2024-A</span>
+      <span class="format-tag">v2.3.1</span>
+      <span class="format-tag">REV-C</span>
+      <span class="format-tag">PO#5100</span>
+    </div>
     <a href="https://www.figma.com/community/plugins" class="cta-button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
         <polyline points="7 10 12 15 17 10"/>
         <line x1="12" y1="15" x2="12" y2="3"/>
       </svg>
-      Install for Figma
+      Install Free
     </a>
   </section>
 
@@ -470,58 +616,109 @@
         <div class="demo-title">Sequencer</div>
       </div>
       <div class="demo-content">
+        <div class="demo-select">
+          <select class="demo-dropdown">
+            <option>Invoice# (INV-0047)</option>
+            <option>Quote# (Q0012)</option>
+            <option>Revision (REV-C)</option>
+          </select>
+          <div class="demo-icon-btn">+</div>
+          <div class="demo-icon-btn">×</div>
+        </div>
         <div class="number-display">
           <div class="number-box">
             <div class="number-label">Current</div>
-            <div class="number-value">5100</div>
+            <div class="number-value">INV-0047</div>
           </div>
           <div class="arrow">→</div>
           <div class="number-box">
             <div class="number-label">Next</div>
-            <div class="number-value next">5101</div>
+            <div class="number-value next">INV-0048</div>
           </div>
         </div>
-        <button class="demo-button">Update Sequence</button>
+        <button class="demo-button">Update Invoice#</button>
       </div>
     </div>
   </div>
 
+  <!-- Use Cases -->
+  <section class="use-cases">
+    <div class="use-cases-header">
+      <h2>Endless possibilities</h2>
+      <p>Numbers, letters, or both. Add prefixes and suffixes to match your workflow.</p>
+    </div>
+    <div class="use-cases-grid">
+      <div class="use-case">
+        <div class="use-case-format">INV-0001</div>
+        <div class="use-case-label">Invoices</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">Q2024-A</div>
+        <div class="use-case-label">Quotes</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">PO#5100</div>
+        <div class="use-case-label">Purchase Orders</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">EST-042</div>
+        <div class="use-case-label">Estimates</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">REV-C</div>
+        <div class="use-case-label">Revisions</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">v2.1.0</div>
+        <div class="use-case-label">Versions</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">PROJ-AA</div>
+        <div class="use-case-label">Project Codes</div>
+      </div>
+      <div class="use-case">
+        <div class="use-case-format">DOC#789</div>
+        <div class="use-case-label">Documents</div>
+      </div>
+    </div>
+  </section>
+
   <!-- Features -->
   <section class="features">
     <div class="features-header">
-      <h2>Simple by design</h2>
-      <p>No accounts. No cloud sync. Just a tool that does one thing well.</p>
+      <h2>Power without complexity</h2>
+      <p>Everything you need. Nothing you don't.</p>
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <h3>Batch updates</h3>
-        <p>Finds and updates every text layer on the page that matches your sequence. Headers, footers, anywhere.</p>
+        <div class="feature-icon">♾️</div>
+        <h3>Unlimited sequences</h3>
+        <p>Create as many sequences as you need. Switch between invoices, quotes, and revisions without losing your place.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">💾</div>
-        <h3>Remembers your place</h3>
-        <p>Saves your last sequence to the document. Come back tomorrow and pick up right where you left off.</p>
+        <div class="feature-icon">🔤</div>
+        <h3>Numbers or letters</h3>
+        <p>Increment numbers (001→002) or letters (A→B→Z→AA). Perfect for versions, revisions, and alphanumeric codes.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3>Custom formats</h3>
+        <p>Add prefixes and suffixes to create any format. INV-0001, Q2024-A, REV-C—whatever your workflow needs.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🎯</div>
-        <h3>Smart detection</h3>
-        <p>Select a text layer with your current value and the plugin auto-detects it. Or just type one in manually.</p>
+        <h3>Batch updates</h3>
+        <p>Updates every matching text layer on the page instantly. Headers, footers, tables—all synced with one click.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Zero configuration</h3>
-        <p>No settings. No preferences. No cloud accounts. Install it and start using it in under 10 seconds.</p>
+        <div class="feature-icon">💾</div>
+        <h3>Persistent memory</h3>
+        <p>Your sequences save to the document. Close Figma, come back tomorrow—pick up exactly where you left off.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🔒</div>
-        <h3>Fully local</h3>
-        <p>All data stays in your Figma file. Nothing is sent to external servers. Privacy by default.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">↩️</div>
-        <h3>Manual override</h3>
-        <p>Need to jump to a specific number? The reset field lets you set any starting point you want.</p>
+        <h3>100% private</h3>
+        <p>No accounts. No cloud. No tracking. Everything stays in your Figma file. Your data is yours.</p>
       </div>
     </div>
   </section>
@@ -529,34 +726,48 @@
   <!-- How It Works -->
   <section class="how-it-works">
     <div class="how-it-works-content">
-      <h2>How it works</h2>
+      <h2>Up and running in seconds</h2>
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-number">1</div>
-          <div class="step-icon">🔌</div>
-          <h3>Open the plugin</h3>
-          <p>Run Sequencer from the Figma plugins menu. Optionally select a text layer first.</p>
+          <div class="step-icon">➕</div>
+          <h3>Create a sequence</h3>
+          <p>Name it, pick number or letter, add an optional prefix/suffix. Done.</p>
         </div>
         <div class="step-card">
           <div class="step-number">2</div>
-          <div class="step-icon">👀</div>
-          <h3>Review the sequence</h3>
-          <p>See your current value and what it will change to. First time? Enter a starting value.</p>
+          <div class="step-icon">📝</div>
+          <h3>Add to your design</h3>
+          <p>Type your sequence value (e.g., INV-0001) anywhere in your Figma file.</p>
         </div>
         <div class="step-card">
           <div class="step-number">3</div>
-          <div class="step-icon">✨</div>
+          <div class="step-icon">🚀</div>
           <h3>Click update</h3>
-          <p>Every matching text layer updates instantly. The new value is saved for next time.</p>
+          <p>Every matching text layer updates instantly. INV-0001 becomes INV-0002.</p>
         </div>
         <div class="step-card">
           <div class="step-number">4</div>
           <div class="step-icon">🔁</div>
-          <h3>Repeat as needed</h3>
-          <p>Next in the sequence? Run again. It remembers where you left off.</p>
+          <h3>Keep going</h3>
+          <p>New document? The plugin remembers your sequences. Just click and continue.</p>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta-section">
+    <h2>Stop updating numbers by hand</h2>
+    <p>Join thousands of designers who've automated the boring stuff.</p>
+    <a href="https://www.figma.com/community/plugins" class="cta-button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Get Sequencer Free
+    </a>
   </section>
 
   <!-- Footer -->
