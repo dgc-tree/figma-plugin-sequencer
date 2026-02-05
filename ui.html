@@ -356,7 +356,7 @@
     <div class="form-title">New Sequence</div>
     <div class="form-group">
       <label class="form-label">Name</label>
-      <input type="text" id="seq-name" class="form-input" placeholder="e.g., Quote#">
+      <input type="text" id="seq-name" class="form-input" placeholder="eg. Quote#">
     </div>
     <div class="form-group">
       <label class="form-label">Type</label>
@@ -374,15 +374,11 @@
     <div class="form-row">
       <div class="form-group small">
         <label class="form-label">Prefix</label>
-        <input type="text" id="seq-prefix" class="form-input" placeholder="Q">
+        <input type="text" id="seq-prefix" class="form-input" placeholder="eg. Q">
       </div>
       <div class="form-group">
-        <label class="form-label">Starting Value</label>
-        <input type="text" id="seq-start" class="form-input" placeholder="0001">
-      </div>
-      <div class="form-group small">
-        <label class="form-label">Suffix</label>
-        <input type="text" id="seq-suffix" class="form-input" placeholder="-A">
+        <label class="form-label">Start value</label>
+        <input type="text" id="seq-start" class="form-input" placeholder="eg. 0001">
       </div>
     </div>
     <div id="format-preview" class="format-preview">
@@ -470,7 +466,6 @@
     const seqNameInput = document.getElementById('seq-name');
     const seqPrefixInput = document.getElementById('seq-prefix');
     const seqStartInput = document.getElementById('seq-start');
-    const seqSuffixInput = document.getElementById('seq-suffix');
     const formatPreview = document.getElementById('format-preview');
     const cancelCreate = document.getElementById('cancel-create');
     const confirmCreate = document.getElementById('confirm-create');
@@ -576,7 +571,6 @@
       seqNameInput.value = '';
       seqPrefixInput.value = '';
       seqStartInput.value = '';
-      seqSuffixInput.value = '';
       document.querySelector('input[name="seq-type"][value="number"]').checked = true;
       updateCreatePreview();
       seqNameInput.focus();
@@ -626,14 +620,12 @@
     // ----- Value Formatting -----
     function getFullValue(sequence) {
       const prefix = sequence.prefix || '';
-      const suffix = sequence.suffix || '';
-      return prefix + sequence.value + suffix;
+      return prefix + sequence.value;
     }
 
     function getNextFullValue(sequence) {
       const prefix = sequence.prefix || '';
-      const suffix = sequence.suffix || '';
-      return prefix + incrementValue(sequence) + suffix;
+      return prefix + incrementValue(sequence);
     }
 
     function incrementValue(sequence) {
@@ -669,12 +661,11 @@
     function updateCreatePreview() {
       const prefix = seqPrefixInput.value;
       const value = seqStartInput.value || '0001';
-      const suffix = seqSuffixInput.value;
       const type = document.querySelector('input[name="seq-type"]:checked').value;
 
-      const current = prefix + value + suffix;
+      const current = prefix + value;
       const nextVal = type === 'letter' ? incrementLetter(value || 'A') : incrementNumber(value || '0001');
-      const next = prefix + nextVal + suffix;
+      const next = prefix + nextVal;
 
       formatPreview.innerHTML = `Preview: <strong>${current}</strong> → <strong>${next}</strong>`;
     }
@@ -726,7 +717,6 @@
       const name = seqNameInput.value.trim();
       const prefix = seqPrefixInput.value.trim();
       const value = seqStartInput.value.trim();
-      const suffix = seqSuffixInput.value.trim();
       const type = document.querySelector('input[name="seq-type"]:checked').value;
 
       if (!name) {
@@ -735,7 +725,7 @@
       }
 
       if (!value) {
-        showStatus('Please enter a starting value', 'error');
+        showStatus('Please enter a start value', 'error');
         return;
       }
 
@@ -756,7 +746,6 @@
           name: name,
           prefix: prefix,
           value: type === 'letter' ? value.toUpperCase() : value,
-          suffix: suffix,
           sequenceType: type
         }
       }, '*');
@@ -807,14 +796,12 @@
     // Enter key support
     seqNameInput.onkeypress = (e) => { if (e.key === 'Enter') seqPrefixInput.focus(); };
     seqPrefixInput.onkeypress = (e) => { if (e.key === 'Enter') seqStartInput.focus(); };
-    seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') seqSuffixInput.focus(); };
-    seqSuffixInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
+    seqStartInput.onkeypress = (e) => { if (e.key === 'Enter') confirmCreate.click(); };
     resetInput.onkeypress = (e) => { if (e.key === 'Enter') resetBtn.click(); };
 
     // Live preview updates
     seqPrefixInput.oninput = updateCreatePreview;
     seqStartInput.oninput = updateCreatePreview;
-    seqSuffixInput.oninput = updateCreatePreview;
     document.querySelectorAll('input[name="seq-type"]').forEach(radio => {
       radio.onchange = updateCreatePreview;
     });

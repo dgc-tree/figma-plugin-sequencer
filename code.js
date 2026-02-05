@@ -9,7 +9,7 @@
 // - Multiple named sequences (Invoice#, Estimate#, PO#, etc.)
 // - Number sequences (5100 → 5101 → 5102)
 // - Letter sequences (A → B → ... → Z → AA → AB)
-// - Optional prefix/suffix (Q0001, INV-100-A, etc.)
+// - Optional prefix (Q0001, INV-100, etc.)
 // - Batch updates all matching text layers
 // - Persists between sessions
 // ============================================================
@@ -70,7 +70,6 @@ function migrateIfNeeded() {
         name: 'Invoice#',
         prefix: '',
         value: oldValue,
-        suffix: '',
         type: 'number'
       };
 
@@ -129,19 +128,17 @@ function incrementValue(sequence) {
   }
 }
 
-// Get the full formatted value: prefix + value + suffix
-// Example: prefix="Q", value="0001", suffix="-A" → "Q0001-A"
+// Get the full formatted value: prefix + value
+// Example: prefix="Q", value="0001" → "Q0001"
 function getFullValue(sequence) {
   const prefix = sequence.prefix || '';
-  const suffix = sequence.suffix || '';
-  return prefix + sequence.value + suffix;
+  return prefix + sequence.value;
 }
 
 // Get the next full formatted value
 function getNextFullValue(sequence) {
   const prefix = sequence.prefix || '';
-  const suffix = sequence.suffix || '';
-  return prefix + incrementValue(sequence) + suffix;
+  return prefix + incrementValue(sequence);
 }
 
 // ----------------------------------------------------------
@@ -240,7 +237,6 @@ figma.ui.onmessage = async (msg) => {
       name: msg.name.trim(),
       prefix: (msg.prefix || '').trim(),
       value: msg.value.trim(),
-      suffix: (msg.suffix || '').trim(),
       type: msg.sequenceType // 'number' or 'letter'
     };
 
