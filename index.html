@@ -174,23 +174,25 @@
       gap: 24px;
     }
 
-    .seq-box {
-      text-align: center;
+    .static-labels {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 60px 16px;
     }
 
-    .seq-label {
+    .static-label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--gray-400);
-      margin-bottom: 8px;
     }
 
     .seq-value {
-      font-size: 42px;
+      font-size: 34px;
       font-weight: 700;
       font-family: 'SF Mono', Monaco, monospace;
-      min-width: 180px;
+      min-width: 140px;
+      text-align: center;
     }
 
     .seq-current {
@@ -207,10 +209,10 @@
     }
 
     .seq-type {
-      margin-top: 16px;
-      font-size: 14px;
+      margin-top: 12px;
+      font-size: 28px;
       color: var(--gray-500);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     /* Animation for cycling through sequences */
@@ -547,109 +549,71 @@
   <!-- Animated Demo -->
   <div class="demo">
     <div class="demo-animation">
+      <div class="static-labels">
+        <span class="static-label">Current</span>
+        <span class="static-label">Next</span>
+      </div>
       <div class="sequence-slider">
         <!-- Invoice -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">INV-0047</div>
-            </div>
+            <div class="seq-value seq-current">INV-0047</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">INV-0048</div>
-            </div>
+            <div class="seq-value seq-next">INV-0048</div>
           </div>
           <div class="seq-type">Invoice</div>
         </div>
         <!-- Quote -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">Q0012</div>
-            </div>
+            <div class="seq-value seq-current">Q0012</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">Q0013</div>
-            </div>
+            <div class="seq-value seq-next">Q0013</div>
           </div>
           <div class="seq-type">Quote</div>
         </div>
         <!-- Revision -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">REV-C</div>
-            </div>
+            <div class="seq-value seq-current">REV-C</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">REV-D</div>
-            </div>
+            <div class="seq-value seq-next">REV-D</div>
           </div>
           <div class="seq-type">Revision</div>
         </div>
         <!-- Purchase Order -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">PO#5100</div>
-            </div>
+            <div class="seq-value seq-current">PO#5100</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">PO#5101</div>
-            </div>
+            <div class="seq-value seq-next">PO#5101</div>
           </div>
           <div class="seq-type">Purchase Order</div>
         </div>
         <!-- Estimate -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">EST-042</div>
-            </div>
+            <div class="seq-value seq-current">EST-042</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">EST-043</div>
-            </div>
+            <div class="seq-value seq-next">EST-043</div>
           </div>
           <div class="seq-type">Estimate</div>
         </div>
         <!-- Project Code -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">PROJ-AA</div>
-            </div>
+            <div class="seq-value seq-current">PROJ-AA</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">PROJ-AB</div>
-            </div>
+            <div class="seq-value seq-next">PROJ-AB</div>
           </div>
           <div class="seq-type">Project Code</div>
         </div>
         <!-- Document -->
         <div class="sequence-slide">
           <div class="sequence-animation">
-            <div class="seq-box">
-              <div class="seq-label">Current</div>
-              <div class="seq-value seq-current">DOC#789</div>
-            </div>
+            <div class="seq-value seq-current">DOC#789</div>
             <div class="seq-arrow">→</div>
-            <div class="seq-box">
-              <div class="seq-label">Next</div>
-              <div class="seq-value seq-next">DOC#790</div>
-            </div>
+            <div class="seq-value seq-next">DOC#790</div>
           </div>
           <div class="seq-type">Document</div>
         </div>
