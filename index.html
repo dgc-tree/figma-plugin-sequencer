@@ -87,6 +87,7 @@
     .logo-suffix {
       color: #44FF88;
       font-weight: 600;
+      margin-left: 0.15em;  /* half space */
     }
 
     .nav-link {
@@ -292,8 +293,14 @@
 
     .use-cases-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .use-cases-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .use-case {
@@ -532,7 +539,7 @@
       }
 
       .use-cases-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
       }
     }
   </style>
