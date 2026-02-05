@@ -27,7 +27,13 @@ const CURRENT_VERSION = 2;
 // ----------------------------------------------------------
 function getSequences() {
   const data = figma.root.getPluginData(SEQUENCES_KEY);
-  return data ? JSON.parse(data) : [];
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Failed to parse sequences:', e);
+    return [];
+  }
 }
 
 function saveSequences(sequences) {
@@ -275,7 +281,12 @@ function sendSelectionState() {
 
   figma.ui.postMessage({
     type: 'selection-state',
-    ...analysis,
+    state: analysis.state,
+    nodeId: analysis.nodeId,
+    currentText: analysis.currentText,
+    stampedValue: analysis.stampedValue,
+    sequence: analysis.sequence,
+    isDuplicate: analysis.isDuplicate,
     sequences: sequences,
     selectedId: selectedId,
     selectedSequence: selectedSequence
@@ -291,8 +302,16 @@ figma.showUI(__html__, { width: 280, height: 400 });
 // INITIALIZATION
 // ----------------------------------------------------------
 function init() {
-  migrateIfNeeded();
-  sendSelectionState();
+  try {
+    migrateIfNeeded();
+  } catch (e) {
+    console.error('Migration error:', e);
+  }
+  try {
+    sendSelectionState();
+  } catch (e) {
+    console.error('Selection state error:', e);
+  }
 }
 
 init();
@@ -394,12 +413,23 @@ figma.ui.onmessage = async (msg) => {
     // Get the next value to stamp
     const stampValue = getFullValue(sequence);
 
-    // Load font and update text (handle mixed fonts)
-    let fontName = node.fontName;
-    if (fontName === figma.mixed) {
-      fontName = node.getRangeFontName(0, 1);
+    // Load font and update text (handle mixed fonts and empty text)
+    try {
+      let fontName = node.fontName;
+      if (fontName === figma.mixed) {
+        if (node.characters.length > 0) {
+          fontName = node.getRangeFontName(0, 1);
+        } else {
+          fontName = { family: "Inter", style: "Regular" };
+        }
+      }
+      if (fontName === figma.mixed) {
+        fontName = { family: "Inter", style: "Regular" };
+      }
+      await figma.loadFontAsync(fontName);
+    } catch (e) {
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
     }
-    await figma.loadFontAsync(fontName);
     node.characters = stampValue;
 
     // Store link data on the node
@@ -466,12 +496,23 @@ figma.ui.onmessage = async (msg) => {
 
     const stampValue = getFullValue(sequence);
 
-    // Load font (handle mixed fonts)
-    let fontName = node.fontName;
-    if (fontName === figma.mixed) {
-      fontName = node.getRangeFontName(0, 1);
+    // Load font (handle mixed fonts and empty text)
+    try {
+      let fontName = node.fontName;
+      if (fontName === figma.mixed) {
+        if (node.characters.length > 0) {
+          fontName = node.getRangeFontName(0, 1);
+        } else {
+          fontName = { family: "Inter", style: "Regular" };
+        }
+      }
+      if (fontName === figma.mixed) {
+        fontName = { family: "Inter", style: "Regular" };
+      }
+      await figma.loadFontAsync(fontName);
+    } catch (e) {
+      await figma.loadFontAsync({ family: "Inter", style: "Regular" });
     }
-    await figma.loadFontAsync(fontName);
     node.characters = stampValue;
 
     setNodeLinkData(node, sequence.id, stampValue);
