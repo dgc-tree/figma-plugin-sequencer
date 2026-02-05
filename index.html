@@ -102,8 +102,8 @@
     .hero-badge {
       display: inline-block;
       padding: 6px 14px;
-      background: var(--primary-light);
-      color: var(--primary-text);
+      background: #D6FFE5;
+      color: var(--gray-900);
       border-radius: 50px;
       font-size: 13px;
       font-weight: 500;
@@ -131,8 +131,8 @@
       align-items: center;
       gap: 8px;
       padding: 14px 28px;
-      background: var(--primary-dark);
-      color: white;
+      background: #44FF88;
+      color: var(--gray-900);
       text-decoration: none;
       border-radius: 10px;
       font-weight: 600;
@@ -141,7 +141,7 @@
     }
 
     .cta-button:hover {
-      background: var(--primary-text);
+      background: var(--primary-dark);
       transform: translateY(-2px);
     }
 
@@ -220,12 +220,12 @@
     @keyframes fadeInOut {
       0% { opacity: 0; transform: translateY(10px); }
       2% { opacity: 1; transform: translateY(0); }
-      12% { opacity: 1; transform: translateY(0); }
-      14%, 100% { opacity: 0; transform: translateY(10px); }
+      14% { opacity: 1; transform: translateY(0); }
+      17%, 100% { opacity: 0; transform: translateY(10px); }
     }
 
     .sequence-slide {
-      animation: fadeInOut 21s ease-in-out infinite backwards;
+      animation: fadeInOut 18s ease-in-out infinite backwards;
       position: absolute;
       width: 100%;
       left: 0;
@@ -248,7 +248,6 @@
     .sequence-slide:nth-child(4) { animation-delay: 9s; }
     .sequence-slide:nth-child(5) { animation-delay: 12s; }
     .sequence-slide:nth-child(6) { animation-delay: 15s; }
-    .sequence-slide:nth-child(7) { animation-delay: 18s; }
 
     /* ===== USE CASES ===== */
     .use-cases {
@@ -591,15 +590,6 @@
           </div>
           <div class="seq-type">Purchase Order</div>
         </div>
-        <!-- Estimate -->
-        <div class="sequence-slide">
-          <div class="sequence-animation">
-            <div class="seq-value seq-current">EST-042</div>
-            <div class="seq-arrow">→</div>
-            <div class="seq-value seq-next">EST-043</div>
-          </div>
-          <div class="seq-type">Estimate</div>
-        </div>
         <!-- Project Code -->
         <div class="sequence-slide">
           <div class="sequence-animation">
@@ -640,10 +630,6 @@
       <div class="use-case">
         <div class="use-case-format">PO#5100</div>
         <div class="use-case-label">Purchase Orders</div>
-      </div>
-      <div class="use-case">
-        <div class="use-case-format">EST-042</div>
-        <div class="use-case-label">Estimates</div>
       </div>
       <div class="use-case">
         <div class="use-case-format">REV-C</div>
