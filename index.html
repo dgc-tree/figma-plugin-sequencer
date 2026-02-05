@@ -107,7 +107,11 @@
       border-radius: 50px;
       font-size: 13px;
       font-weight: 500;
-      margin-bottom: 24px;
+      transition: background 0.2s;
+    }
+
+    .hero-badge:hover {
+      background: rgba(214, 255, 229, 0.7);
     }
 
     .hero h1 {
@@ -141,8 +145,12 @@
     }
 
     .cta-button:hover {
-      background: var(--primary-dark);
+      background: rgba(68, 255, 136, 0.7);
       transform: translateY(-2px);
+    }
+
+    .hero .cta-button {
+      margin-bottom: 24px;
     }
 
     .cta-button svg {
@@ -401,18 +409,25 @@
     }
 
     .step-card {
-      background: var(--gray-50);
-      border-radius: 16px;
-      padding: 32px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 28px;
       text-align: center;
       position: relative;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .step-card:hover {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
     }
 
     .step-icon {
-      width: 64px;
-      height: 64px;
-      background: white;
-      border-radius: 16px;
+      width: 48px;
+      height: 48px;
+      background: var(--primary-light);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -533,9 +548,6 @@
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">Free Figma Plugin</div>
-    <h1>Stop updating sequences by hand</h1>
-    <p class="hero-subtitle">Compliance-ready sequential numbering for invoices, quotes, and design files. Built for accounting requirements.</p>
     <a href="https://www.figma.com/community/plugins" class="cta-button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -544,6 +556,9 @@
       </svg>
       Install Free
     </a>
+    <h1>Stop updating sequences by hand</h1>
+    <p class="hero-subtitle">Compliance-ready sequential numbering for invoices, quotes, and design files. Built for accounting requirements.</p>
+    <div class="hero-badge">Free Figma Plugin</div>
   </section>
 
   <!-- Animated Demo -->
