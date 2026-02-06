@@ -54,15 +54,40 @@
     }
 
     [data-theme="dark"] .step-number {
-      background: #1a3a2a;
+      background: #44FF88;
+      color: #111827;
     }
 
     [data-theme="dark"] .demo-animation {
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
     }
 
+    [data-theme="dark"] .mode-item {
+      background: #ffffff;
+      border-color: #e5e7eb;
+    }
+
+    [data-theme="dark"] .mode-item h3 {
+      color: #111827;
+    }
+
     [data-theme="dark"] .mode-metaphor {
-      color: var(--gray-600);
+      color: #6b7280;
+    }
+
+    /* Force dark text on green backgrounds in dark mode */
+    [data-theme="dark"] .cta-button {
+      color: #111827;
+    }
+
+    [data-theme="dark"] .logo-icon {
+      color: #111827;
+    }
+
+    [data-theme="dark"] .use-cases,
+    [data-theme="dark"] .use-cases-header h2,
+    [data-theme="dark"] .use-cases-header p {
+      color: #111827;
     }
 
     [data-theme="dark"] .mode-item:hover,
@@ -1001,7 +1026,7 @@
     (function() {
       var saved = localStorage.getItem('theme');
       var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = saved || (prefersDark ? 'dark' : 'light');
+      var theme = saved || 'dark';
       document.documentElement.setAttribute('data-theme', theme);
 
       var toggle = document.getElementById('theme-toggle');
