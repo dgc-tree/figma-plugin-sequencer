@@ -32,11 +32,16 @@
       --gray-900: #111827;
     }
 
+    html {
+      overflow-x: hidden;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       color: var(--gray-800);
       line-height: 1.6;
       background: var(--gray-50);
+      overflow-x: hidden;
     }
 
     /* ===== HEADER ===== */
@@ -60,7 +65,7 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 6px;
       font-weight: 600;
       font-size: 27px;
       color: var(--gray-900);
@@ -70,12 +75,12 @@
     .logo-icon {
       width: 48px;
       height: 48px;
-      background: var(--primary-dark);
+      background: #44FF88;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
+      color: var(--gray-900);
       font-weight: 700;
       font-size: 21px;
     }
@@ -104,7 +109,7 @@
 
     /* ===== HERO ===== */
     .hero {
-      padding: 80px 24px 100px;
+      padding: 80px 24px 50px;
       text-align: center;
       background: linear-gradient(180deg, white 0%, var(--gray-50) 100%);
     }
@@ -184,6 +189,7 @@
       overflow: hidden;
       border: 1px solid var(--gray-200);
       padding: 40px;
+      max-width: 100%;
     }
 
     .sequence-animation {
@@ -203,13 +209,13 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: var(--gray-400);
+      color: var(--gray-500);
     }
 
     .seq-value {
       font-size: 34px;
       font-weight: 700;
-      font-family: 'SF Mono', Monaco, monospace;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-width: 140px;
       text-align: center;
     }
@@ -224,7 +230,7 @@
 
     .seq-arrow {
       font-size: 28px;
-      color: var(--gray-300);
+      color: var(--gray-500);
     }
 
     .seq-type {
@@ -267,16 +273,67 @@
     .sequence-slide:nth-child(5) { animation-delay: 12s; }
     .sequence-slide:nth-child(6) { animation-delay: 15s; }
 
-    /* ===== USE CASES ===== */
+    /* ===== MODES SECTION ===== */
     .use-cases {
-      padding: 100px 24px 60px;
-      max-width: 1100px;
-      margin: 0 auto;
+      padding: 100px 24px 80px;
+      background: #44FF88;
+      margin-top: -60px;
+      position: relative;
+      color: var(--gray-900);
+    }
+
+    .modes-comparison {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .mode-item {
+      text-align: center;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 0 28px 28px;
+      overflow: visible;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .mode-item:hover {
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+      transform: translateY(-4px);
+    }
+
+    .mode-illustration {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-top: -60px;
+      margin-bottom: 0;
+    }
+
+    .mode-illustration img {
+      max-width: 100%;
+      max-height: 480px;
+      width: auto;
+      height: auto;
+    }
+
+    .mode-item h3 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 6px;
+    }
+
+    .mode-metaphor {
+      font-size: 15px;
+      color: var(--gray-900);
+      font-style: italic;
     }
 
     .use-cases-header {
       text-align: center;
-      margin-bottom: 48px;
+      margin-bottom: 100px;
     }
 
     .use-cases-header h2 {
@@ -287,47 +344,8 @@
     }
 
     .use-cases-header p {
-      color: var(--gray-500);
+      color: var(--gray-900);
       font-size: 16px;
-    }
-
-    .use-cases-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .use-cases-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .use-case {
-      background: white;
-      border: 1px solid var(--gray-200);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .use-case:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.1);
-    }
-
-    .use-case-format {
-      font-family: 'SF Mono', Monaco, monospace;
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--primary-text);
-      margin-bottom: 8px;
-    }
-
-    .use-case-label {
-      font-size: 13px;
-      color: var(--gray-500);
     }
 
     /* ===== FEATURES ===== */
@@ -511,35 +529,159 @@
     }
 
     footer p {
-      color: var(--gray-400);
+      color: var(--gray-500);
       font-size: 13px;
     }
 
+    /* ===== ACCESSIBILITY ===== */
+    a:focus-visible,
+    .cta-button:focus-visible {
+      outline: 2px solid var(--primary-dark);
+      outline-offset: 2px;
+    }
+
+    .nav-link:focus-visible {
+      outline: 2px solid var(--gray-900);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     /* ===== RESPONSIVE ===== */
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
+      .logo {
+        font-size: 22px;
+        gap: 5px;
+      }
+
+      .logo-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+        border-radius: 8px;
+      }
+
+      header {
+        padding: 12px 24px;
+      }
+
       .hero {
-        padding: 60px 24px 80px;
+        padding: 60px 24px 50px;
       }
 
       .hero-subtitle {
         font-size: 16px;
       }
 
+      .demo {
+        padding: 0 24px;
+      }
+
+      .demo-animation {
+        padding: 24px;
+      }
+
       .seq-value {
-        font-size: 28px;
-        min-width: 120px;
+        font-size: 22px;
+        min-width: 0;
+      }
+
+      .seq-arrow {
+        font-size: 20px;
+      }
+
+      .sequence-animation {
+        gap: 12px;
       }
 
       .sequence-slider {
         height: 100px;
       }
 
+      .static-labels {
+        padding: 8px 24px 12px;
+      }
+
+      .seq-type {
+        font-size: 20px;
+      }
+
+      .use-cases {
+        padding: 80px 24px 60px;
+      }
+
+      .use-cases-header {
+        margin-bottom: 40px;
+      }
+
+      .use-cases-header h2 {
+        font-size: 26px;
+      }
+
+      .use-cases-header p {
+        font-size: 14px;
+      }
+
+      .modes-comparison {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .mode-item {
+        max-width: 400px;
+        width: 100%;
+      }
+
+      .mode-illustration {
+        margin-top: -30px;
+      }
+
+      .mode-illustration img {
+        max-width: 280px;
+        max-height: 280px;
+      }
+
       .features {
         padding: 60px 24px;
       }
 
-      .use-cases-grid {
+      .features-header h2 {
+        font-size: 26px;
+      }
+
+      .features-grid {
         grid-template-columns: 1fr;
+      }
+
+      .how-it-works {
+        padding: 60px 24px 80px;
+      }
+
+      .how-it-works h2 {
+        font-size: 26px;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-section {
+        padding: 60px 24px;
+      }
+
+      .cta-section h2 {
+        font-size: 24px;
+      }
+
+      footer {
+        padding: 32px 24px;
       }
     }
   </style>
@@ -565,11 +707,10 @@
         <polyline points="7 10 12 15 17 10"/>
         <line x1="12" y1="15" x2="12" y2="3"/>
       </svg>
-      Install Free
+      Install free in Figma
     </a>
     <h1>Stop updating sequences by hand</h1>
     <p class="hero-subtitle">Compliance-ready sequential numbering for invoices, quotes, and design files. Built for accounting requirements.</p>
-    <div class="hero-badge">Free Figma Plugin</div>
   </section>
 
   <!-- Animated Demo -->
@@ -638,36 +779,26 @@
     </div>
   </div>
 
-  <!-- Use Cases -->
+  <!-- Modes -->
   <section class="use-cases">
     <div class="use-cases-header">
       <h2>Two modes for every need</h2>
-      <p>Compliance mode for binding documents. Design mode for prototypes. Both support numbers, letters, and custom prefixes.</p>
+      <p>Compliance mode for binding documents. Design mode for freedom to make edits.<br>Both support numbers, letters, and custom prefixes.</p>
     </div>
-    <div class="use-cases-grid">
-      <div class="use-case">
-        <div class="use-case-format">INV-0001</div>
-        <div class="use-case-label">Invoices</div>
+    <div class="modes-comparison">
+      <div class="mode-item">
+        <div class="mode-illustration">
+          <img src="images/compliance-stamp.png" alt="Rubber stamp pressing down a sequential number">
+        </div>
+        <h3>Compliance</h3>
+        <p class="mode-metaphor">Like ink, permanent and sequential</p>
       </div>
-      <div class="use-case">
-        <div class="use-case-format">Q0012</div>
-        <div class="use-case-label">Quotes</div>
-      </div>
-      <div class="use-case">
-        <div class="use-case-format">PO#5100</div>
-        <div class="use-case-label">Purchase Orders</div>
-      </div>
-      <div class="use-case">
-        <div class="use-case-format">REV-C</div>
-        <div class="use-case-label">Revisions</div>
-      </div>
-      <div class="use-case">
-        <div class="use-case-format">PROJ-AA</div>
-        <div class="use-case-label">Project Codes</div>
-      </div>
-      <div class="use-case">
-        <div class="use-case-format">DOC#789</div>
-        <div class="use-case-label">Documents</div>
+      <div class="mode-item">
+        <div class="mode-illustration">
+          <img src="images/design-changeable.png" alt="Pencil erasing a number on paper">
+        </div>
+        <h3>Design</h3>
+        <p class="mode-metaphor">Like pencil, erase and redo freely</p>
       </div>
     </div>
   </section>
